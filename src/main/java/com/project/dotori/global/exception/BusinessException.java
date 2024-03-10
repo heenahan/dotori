@@ -11,19 +11,10 @@ public class BusinessException extends RuntimeException {
     private final String message;
 
     public BusinessException(
-        ErrorCode errorCode
-    ) {
-        this.errorCode = errorCode;
-        this.message = errorCode.getDescription();
-    }
-
-    public BusinessException(
         ErrorCode errorCode,
-        List<String> filedNames
+        String message
     ) {
-        var names = String.join(", ", filedNames);
-
         this.errorCode = errorCode;
-        this.message = errorCode.getDescription().formatted(names);
+        this.message = message;
     }
 }

@@ -38,9 +38,10 @@ public class ErrorResponse {
     }
 
     public static ErrorResponse internalServerError(
-        ErrorCode errorCode
+        ErrorCode errorCode,
+        String message
     ) {
         final var status = HttpStatus.INTERNAL_SERVER_ERROR.value();
-        return new ErrorResponse(status, errorCode.getCode(), errorCode.getDescription());
+        return new ErrorResponse(status, errorCode.getCode(), message);
     }
 }
