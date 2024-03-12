@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 @Embeddable
 public class BookBasicInfo {
 
-    private static final String INVALID_ISBN = "Isbn은 13자 이하여야 합니다. length = %d";
+    private static final String INVALID_ISBN = "isbn은 13자 이하여야 합니다. length = %d";
     private static final String INVALID_TITLE = "제목은 50자 이하여야 합니다. length = %d";
     private static final String INVALID_AUTHOR = "작가 이름은 50자 이하여야 합니다. length = %d";
     private static final String INVALID_COVER_PATH = "표지 경로는 100자 이하여야 합니다. length = %d";
