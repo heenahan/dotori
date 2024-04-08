@@ -35,10 +35,9 @@ CMD ["-jar", "dotori.jar"]
 =======
 FROM openjdk:17
 
-RUN mkdir -p /app
-WORKDIR /app
+ARG JAR_FILE=dotori-0.0.1-SNAPSHOT.jar
 
-COPY /build/libs/dotori-0.0.1-SNAPSHOT.jar .
+COPY ./build/libs/${JAR_FILE} .
 
 ENV HOST 0.0.0.0
 EXPOSE 8080
