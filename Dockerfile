@@ -38,6 +38,7 @@ FROM openjdk:17
 ARG JAR_FILE=dotori-0.0.1-SNAPSHOT.jar
 
 RUN ./gradlew clean build
+RUN echo "JAR file location: $(find $GITHUB_WORKSPACE -name '*.jar')"
 
 COPY ./build/libs/${JAR_FILE} .
 
