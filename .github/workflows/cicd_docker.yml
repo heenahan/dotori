@@ -37,6 +37,11 @@ jobs:
         run: ./gradlew clean build
         shell: bash
 
+      - name: Find JAR file
+        run: |
+          echo "JAR file location: $(find $GITHUB_WORKSPACE -name '*.jar')"
+        shell: bash
+
       # docker build 수행
       - name: Set up docker buildx
         id: buildx
