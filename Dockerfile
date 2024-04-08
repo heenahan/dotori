@@ -2,6 +2,8 @@ FROM openjdk:17
 
 ARG JAR_FILE=dotori-0.0.1-SNAPSHOT.jar
 
+RUN ./gradlew clean build
+
 COPY ./build/libs/${JAR_FILE} .
 
 ENV HOST 0.0.0.0
