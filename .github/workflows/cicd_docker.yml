@@ -67,6 +67,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       # 8080 -> 80 포트로 수행하도록 지정
       - name: Docker run
+        # 해당 이미지의 도커 종료 후 80번 포트와 매핑해서 실행
         run: |
           docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
-          docker run -d -p 80:8080 --name go_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest
+          docker run -d -p 80:8080 --name dotori_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest
