@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # 빌드 이미지 jdk 17 & gradle 8.7.0
+=======
+<<<<<<< HEAD
+>>>>>>> ff389f3 (docs : 도커 이미지 만듦)
 FROM gradle:8.7.0-jdk17 AS build
 
 # 소스코드를 복사할 작업 디렉토리
@@ -28,3 +32,16 @@ EXPOSE 8080
 
 ENTRYPOINT ["java"]
 CMD ["-jar", "dotori.jar"]
+=======
+FROM openjdk:17
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY build/libs/dotori-0.0.1-SNAPSHOT.jar .
+
+ENV HOST 0.0.0.0
+EXPOSE 8080
+
+CMD java -jar -Duser.timezone=Asia/Seoul dotori-0.0.1-SNAPSHOT.jar
+>>>>>>> f05407e (docs : 도커 이미지 만듦)
