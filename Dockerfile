@@ -38,7 +38,7 @@ FROM openjdk:17
 RUN mkdir -p /app
 WORKDIR /app
 
-COPY build/libs/dotori-0.0.1-SNAPSHOT.jar .
+COPY /build/libs/dotori-0.0.1-SNAPSHOT.jar .
 
 ENV HOST 0.0.0.0
 EXPOSE 8080
