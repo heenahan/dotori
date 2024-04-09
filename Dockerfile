@@ -1,13 +1,22 @@
-FROM openjdk:17
+FROM gradle:8.7.0-jdk17 AS build
 
-ARG JAR_FILE=dotori-0.0.1-SNAPSHOT.jar
+WORKDIR /app
 
-RUN ./gradlew clean build
-RUN echo "JAR file location: $(find $GITHUB_WORKSPACE -name '*.jar')"
+COPY build.gradle settings.gradle ./
 
-COPY ./build/libs/${JAR_FILE} .
+RUN gradle depencies --no-daemon
 
-ENV HOST 0.0.0.0
+COPY . /app
+
+RUN gradle clean build --no-daemon
+
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+COPY --from=build /app/build/libs/dotori-0.0.1-SNAPSHOT.jar /app/dotori.jar
+
 EXPOSE 8080
 
-CMD java -jar -Duser.timezone=Asia/Seoul dotori-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java"]
+CMD ["-jar", "dotori.jar"]
