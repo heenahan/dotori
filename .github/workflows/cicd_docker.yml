@@ -67,3 +67,4 @@ jobs:
         run: |
           docker pull ghcr.io/heenahan/dotori-auto-deploy:latest
           sh /home/ec2-user/deploy.sh
+
