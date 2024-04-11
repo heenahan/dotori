@@ -15,7 +15,7 @@ env:
   VERSION: ${{ github.sha }}
   CONTAINER_NAME1: dotori-auto-deploy1
   CONTAINER_NAME2: dotori-auto-deploy2
-  DOMAIN_NAME: ec2-13-125-94-105.ap-northeast-2.compute.amazonaws.com
+  DOMAIN_NAME: ec2-13-209-225-141.ap-northeast-2.compute.amazonaws.com
   NAME: dotori_prod
 
 jobs:
