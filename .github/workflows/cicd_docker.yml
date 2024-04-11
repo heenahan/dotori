@@ -61,7 +61,7 @@ jobs:
       - name: Docker run
         # 해당 이미지의 도커 종료 후 80번 포트와 매핑해서 실행
         run: |
-          docker ps -q --filter "name=${{ env.CONTAINER_NAME1 }}" | grep -q . && docker stop ${{ env.CONTAINER_NAME1 }} && docker rm -fv ${{ env.CONTANIER_NAME1 }}
+          docker ps -q --filter "name=${{ env.CONTAINER_NAME1 }}" | grep -q . && docker stop ${{ env.CONTAINER_NAME1 }} && docker rm -fv ${{ env.CONTAINER_NAME1 }}
           docker run -d \
                 -e VIRTUAL_HOST=${{ env.DOMAIN_NAME }} \
                 -e CONTAINER_NAME=${{ env.CONTAINER_NAME1 }} \
