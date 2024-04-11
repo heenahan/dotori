@@ -13,8 +13,8 @@ on:
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/dotori-auto-deploy
   VERSION: ${{ github.sha }}
-  CONTAINER_NAME1: dotori-auto-deploy1
-  CONTAINER_NAME2: dotori-auto-deploy2
+  CONTAINER_NAME1: dotori-auto-deploy-blue
+  CONTAINER_NAME2: dotori-auto-deploy-green
   DOMAIN_NAME: ec2-13-209-225-141.ap-northeast-2.compute.amazonaws.com
   NAME: dotori_prod
 
