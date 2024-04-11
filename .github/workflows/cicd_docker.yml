@@ -13,7 +13,10 @@ on:
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/dotori-auto-deploy
   VERSION: ${{ github.sha }}
-  NAME: dotori_cicd
+  CONTAINER_NAME1: dotori-auto-deploy1
+  CONTAINER_NAME2: dotori-auto-deploy2
+  DOMAIN_NAME: ec2-13-125-94-105.ap-northeast-2.compute.amazonaws.com
+  NAME: dotori_prod
 
 jobs:
   # 빌드 Job
@@ -58,5 +61,16 @@ jobs:
       - name: Docker run
         # 해당 이미지의 도커 종료 후 80번 포트와 매핑해서 실행
         run: |
-          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
-          docker run -d -p 80:8080 --name dotori_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest
+          docker ps -q --filter "name=${{ env.CONTAINER_NAME1 }}" | grep -q . && docker stop ${{ env.CONTAINER_NAME1 }} && docker rm -fv ${{ env.CONTANIER_NAME1 }}
+          docker run -d \
+                -e VIRTUAL_HOST=${{ env.DOMAIN_NAME }} \
+                -e CONTAINER_NAME=${{ env.CONTAINER_NAME1 }} \
+                --name ${{ env.CONTAINER_NAME1 }} \
+                --restart always ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}
+          docker ps -q --filter "name=${{ env.CONTAINER_NAME2 }}" | grep -q . && docker stop ${{ env.CONTAINER_NAME2 }} && docker rm -fv ${{ env.CONTAINER_NAME2 }}
+          docker run -d \
+                -e VIRTUAL_HOST=${{ env.DOMAIN_NAME }} \
+                -e CONTAINER_NAME=${{ env.CONTAINER_NAME2 }} \
+                --name ${{ env.CONTAINER_NAME2 }} \
+                --restart always ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}
+          docker image prune -af
