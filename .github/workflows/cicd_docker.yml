@@ -65,4 +65,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: RUN deploy.sh
         run: |
+          docker pull ghcr.io/heenahan/dotori-auto-deploy:latest
           sh /home/ec2-user/deploy.sh
