@@ -65,4 +65,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: RUN deploy.sh
         run: |
-          sh /home/ubuntu/deploy.sh
+          sh /home/ec2-user/deploy.sh
