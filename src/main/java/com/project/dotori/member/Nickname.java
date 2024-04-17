@@ -1,4 +1,4 @@
-package com.project.dotori.user;
+package com.project.dotori.member;
 
 import com.project.dotori.global.exception.BusinessException;
 import com.project.dotori.global.exception.ErrorCode;

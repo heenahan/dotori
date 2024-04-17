@@ -1,4 +1,4 @@
-package com.project.dotori.user;
+package com.project.dotori.book;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -26,9 +26,6 @@ public class MemberBook {
     @Column(name = "status", length = 30, nullable = false)
     private MemberBookStatus memberBookStatus;
 
-    @Embedded
-    private MemberBookReview memberBookReview;
-
     @Builder
     private MemberBook(
         Long memberId,
@@ -38,15 +35,5 @@ public class MemberBook {
         this.memberId = memberId;
         this.bookId = bookId;
         this.memberBookStatus = memberBookStatus;
-    }
-
-    public void updateMemberBookReview(
-        Integer score,
-        String review
-    ) {
-        this.memberBookReview = MemberBookReview.builder()
-            .score(score)
-            .review(review)
-            .build();
     }
 }

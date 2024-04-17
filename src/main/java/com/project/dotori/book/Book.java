@@ -36,10 +36,7 @@ public class Book {
         String isbn,
         String title,
         String author,
-        String coverPath,
         Integer page,
-        Integer price,
-        String description,
         String publisher,
         LocalDate publishDate
     ) {
@@ -48,9 +45,6 @@ public class Book {
             .isbn(isbn)
             .title(title)
             .author(author)
-            .coverPath(coverPath)
-            .description(description)
-            .price(price)
             .page(page)
             .build();
         this.publishInfo = PublishInfo.builder()
@@ -60,12 +54,12 @@ public class Book {
     }
 
     public void updateBookDetailInfo(
-        String toc,
-        String story
+        String coverPath,
+        String description
     ) {
         this.bookDetailInfo = BookDetailInfo.builder()
-            .toc(toc)
-            .story(story)
+            .coverPath(coverPath)
+            .description(description)
             .build();
     }
 }
