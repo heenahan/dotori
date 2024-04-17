@@ -38,10 +38,10 @@ public class BookDetailInfo {
         String coverPath,
         String description
     ) {
-        if (StringUtils.isBlank(coverPath) || coverPath.length() > 100) {
+        if (StringUtils.isNoneBlank(coverPath) && coverPath.length() > 100) {
             throw new BusinessException(ErrorCode.INVALID_LENGTH, INVALID_COVER_PATH.formatted(StringUtils.length(coverPath)));
         }
-        if (StringUtils.isBlank(description) || description.length() > 500) {
+        if (StringUtils.isNoneBlank(description) && description.length() > 500) {
             throw new BusinessException(ErrorCode.INVALID_LENGTH, INVALID_DESCRIPTION.formatted(StringUtils.length(description)));
         }
     }
