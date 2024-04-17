@@ -1,28 +1,20 @@
-package com.project.dotori.user;
+package com.project.dotori.book;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "members")
+@Table(name = "book_categories")
 @Entity
-public class Member {
+public class BookCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded
-    private Nickname nickname;
-
-    @Builder
-    private Member(
-        String nickname
-    ) {
-
-    }
+    @Column(name = "name", length = 50, nullable = false)
+    private String name;
 }

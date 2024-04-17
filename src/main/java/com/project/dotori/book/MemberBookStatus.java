@@ -1,4 +1,4 @@
-package com.project.dotori.user;
+package com.project.dotori.book;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
