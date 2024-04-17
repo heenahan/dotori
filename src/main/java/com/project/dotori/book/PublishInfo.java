@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 public class PublishInfo {
 
     private static final String INVALID_PUBLISHER = "출판사는 50자 이하여야 합니다. length = %d";
-    private static final String AFTER_PUBLISH_DATE = "출판 일자는 미래여서는 안됩니다. value = %s";
+    private static final String AFTER_PUBLISH_DATE = "출판 일자는 null이거나 오늘보다 미래여서는 안됩니다. value = %s";
     private static final String ZERO_PUBLISH_DATE = "출판 일자에 0이 들어가서는 안됩니다. value = %s";
 
     @Column(name = "publisher", length = 50, nullable = false)
@@ -51,7 +52,7 @@ public class PublishInfo {
         LocalDate publishDate
     ) {
         var now = LocalDate.now();
-        if (publishDate.isAfter(now)) {
+        if (Objects.isNull(publishDate) || publishDate.isAfter(now)) {
             throw new BusinessException(ErrorCode.INVALID_DATE, AFTER_PUBLISH_DATE.formatted(publishDate));
         }
         if (publishDate.getYear() == 0) {
