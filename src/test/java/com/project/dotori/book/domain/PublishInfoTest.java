@@ -1,6 +1,7 @@
-package com.project.dotori.book;
+package com.project.dotori.book.domain;
 
 import com.project.dotori.StringRandomGenerator;
+import com.project.dotori.book.domain.PublishInfo;
 import com.project.dotori.global.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;

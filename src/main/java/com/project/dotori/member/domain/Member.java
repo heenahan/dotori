@@ -1,4 +1,4 @@
-package com.project.dotori.member;
+package com.project.dotori.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

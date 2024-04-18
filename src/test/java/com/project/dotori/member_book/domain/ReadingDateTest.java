@@ -1,5 +1,6 @@
-package com.project.dotori.book;
+package com.project.dotori.member_book.domain;
 
+import com.project.dotori.member_book.domain.ReadingDate;
 import com.project.dotori.global.exception.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
