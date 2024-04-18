@@ -31,7 +31,7 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ env.VERSION }}
-          restore-keys: |
+          restore-keys: |q
             ${{ runner.os }}-buildx-
       # GitHub 컨테이너 레지스트리에 로그인 후 빌드 & 푸시
       - name: Login to ghcr
