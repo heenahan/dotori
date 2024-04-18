@@ -1,4 +1,4 @@
-package com.project.dotori.book;
+package com.project.dotori.member_book.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
