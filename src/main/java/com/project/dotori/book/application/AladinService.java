@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerErrorException;
 
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -58,10 +58,11 @@ public class AladinService {
 
             var response = aladinOpenFeign.findBookDetail(lookUpURI, request);
 
-            var arrayNode = objectMapper.readTree(response).get("item").elements();
-            validBook(isbn13, arrayNode);
+            var jsonNode = objectMapper.readTree(response).get("item");
+            validBook(isbn13, jsonNode);
 
-            return objectMapper.treeToValue(arrayNode.next(), AladinLookUpResponse.class);
+            var elements = jsonNode.elements();
+            return objectMapper.treeToValue(elements.next(), AladinLookUpResponse.class);
         } catch (IOException e) {
             log.warn("json을 객체로 변환하는 과정에서 예외가 발생했습니다. exception : ", e);
             throw new ServerErrorException("서버에서 예기치못한 문제가 발생했습니다.", e);
@@ -70,9 +71,9 @@ public class AladinService {
 
     private void validBook(
         String isbn13,
-        Iterator<JsonNode> arrayNode
+        JsonNode jsonNode
     ) {
-        if (!arrayNode.hasNext()) {
+        if (Objects.isNull(jsonNode)) {
             throw new BusinessException(ErrorCode.NOT_FOUND, NOT_FOUND_BOOK.formatted(isbn13));
         }
     }
