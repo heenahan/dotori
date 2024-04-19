@@ -22,7 +22,7 @@ public class BookService {
         return aladinLookUpResponse.toBookDetailResponse();
     }
 
-    public Slice<BookSearchResponse> searchBook(
+    public Slice<BookSearchResponse> searchBooks(
         String query,
         Pageable pageable
     ) {

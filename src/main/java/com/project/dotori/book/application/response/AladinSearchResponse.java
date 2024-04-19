@@ -1,7 +1,10 @@
 package com.project.dotori.book.application.response;
 
+import lombok.Builder;
+
 import java.time.LocalDate;
 
+@Builder
 public record AladinSearchResponse(
     String title,
     String link,
