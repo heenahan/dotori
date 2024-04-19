@@ -32,7 +32,7 @@ public class BookController {
         @RequestParam("search") String search,
         @PageableDefault Pageable pageable
     ) {
-        var responses = bookService.searchBook(search, pageable);
+        var responses = bookService.searchBooks(search, pageable);
 
         return ResponseEntity.ok(ApiResponse.ok(responses));
     }

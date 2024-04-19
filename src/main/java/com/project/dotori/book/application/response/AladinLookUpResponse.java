@@ -1,7 +1,10 @@
 package com.project.dotori.book.application.response;
 
+import lombok.Builder;
+
 import java.time.LocalDate;
 
+@Builder
 public record AladinLookUpResponse(
     String title,
     String link,
@@ -28,7 +31,7 @@ public record AladinLookUpResponse(
             .build();
     }
 
-    record AladinSubInfo(
+    public record AladinSubInfo(
         Integer itemPage
     ) {}
 }
