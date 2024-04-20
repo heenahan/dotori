@@ -12,6 +12,10 @@ java {
     sourceCompatibility = '17'
 }
 
+configurations {
+    asciidoctorExt
+}
+
 repositories {
     mavenCentral()
 }
@@ -49,7 +53,33 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-tasks.named('asciidoctor') {
+asciidoctor {
+    configurations 'asciidoctorExt'
+
+    baseDirFollowsSourceFile() // 다른 adoc 파일 include 시 경로를 baseDir로 맞춘다.
+
     inputs.dir snippetsDir
+
+    // 특정 파일만 html로 생성
+    sources {
+        include("**/index.adoc")
+    }
+
     dependsOn test
+    outputDir file('build/docs/asciidoc')
+}
+
+task copyAsciidoc(type: Copy) {
+    doFirst {
+        delete "src/main/resources/static/docs/index.html"
+    }
+    from "build/docs/asciidoc/"
+    into "src/main/resources/static/docs"
+    include "index.html"
+
+    dependsOn asciidoctor
+}
+
+build {
+    dependsOn copyAsciidoc
 }
