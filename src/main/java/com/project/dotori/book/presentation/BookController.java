@@ -29,7 +29,7 @@ public class BookController {
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<Slice<BookSearchResponse>>> searchBook(
-        @RequestParam("search") String search,
+        @RequestParam("query") String search,
         @PageableDefault Pageable pageable
     ) {
         var responses = bookService.searchBooks(search, pageable);
