@@ -1,5 +1,6 @@
-package com.project.dotori.book.application.response;
+package com.project.dotori.book.infrastructure.openfeign.response;
 
+import com.project.dotori.book.application.response.BookSearchResponse;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -23,7 +24,6 @@ public record AladinSearchResponse(
             .imagePath(cover)
             .author(author)
             .title(title)
-            .description(description)
             .publisher(publisher)
             .build();
     }

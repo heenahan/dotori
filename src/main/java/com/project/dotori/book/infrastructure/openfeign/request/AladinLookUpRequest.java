@@ -1,4 +1,4 @@
-package com.project.dotori.book.application.request;
+package com.project.dotori.book.infrastructure.openfeign.request;
 
 import lombok.AccessLevel;
 import lombok.Builder;

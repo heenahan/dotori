@@ -1,8 +1,9 @@
-package com.project.dotori.book.application;
+package com.project.dotori.book.infrastructure.openfeign;
 
 import com.project.dotori.global.config.CustomPropertiesConfig;
 import com.project.dotori.global.config.OpenFeignConfig;
 import com.project.dotori.global.exception.BusinessException;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Slf4j
 @SpringBootTest
 @Import({
     OpenFeignConfig.class,
@@ -35,10 +37,10 @@ class AladinServiceTest {
         var pageRequest = PageRequest.of(1, 20);
 
         // when
-        var aladinSearchResponses = aladinService.searchBookByAladin(query, pageRequest);
+        var bookSearchResponses = aladinService.searchBooks(query, pageRequest);
 
         // then
-        assertThat(aladinSearchResponses.item()).isNotEmpty();
+        assertThat(bookSearchResponses).isNotEmpty();
     }
 
     @DisplayName("알라딘 API를 통해 도서 상세 정보를 조회한다.")
@@ -48,7 +50,7 @@ class AladinServiceTest {
         var isbn13 = "9788966263158";
 
         // when
-        var aladinLookUpResponse = aladinService.findBookDetailByAladin(isbn13);
+        var aladinLookUpResponse = aladinService.findBookDetail(isbn13);
 
         // then
         assertThat(aladinLookUpResponse).isNotNull();
@@ -61,7 +63,7 @@ class AladinServiceTest {
         var isbn13 = "WIRED_ISBN";
 
         // when & then
-        assertThatThrownBy(() -> aladinService.findBookDetailByAladin(isbn13))
+        assertThatThrownBy(() -> aladinService.findBookDetail(isbn13))
             .isInstanceOf(BusinessException.class);
     }
 }

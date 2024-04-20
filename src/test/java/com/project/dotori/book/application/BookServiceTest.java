@@ -1,8 +1,7 @@
 package com.project.dotori.book.application;
 
-import com.project.dotori.book.application.response.AladinLookUpResponse;
-import com.project.dotori.book.application.response.AladinSearchResponse;
-import com.project.dotori.book.application.response.AladinSearchResponses;
+import com.project.dotori.book.application.response.BookDetailResponse;
+import com.project.dotori.book.application.response.BookSearchResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ class BookServiceTest {
     private BookService bookService;
 
     @MockBean
-    private AladinService aladinService;
+    private BookApiService bookApiService;
 
     @DisplayName("도서를 검색한다.")
     @Test
@@ -35,17 +34,17 @@ class BookServiceTest {
         var pageRequest = PageRequest.of(1, 20);
         var query = "대규모";
 
-        var aladinSearchResponse1 = createAladinSearchResponse();
-        var aladinSearchResponse2 = createAladinSearchResponse();
-        var aladinSearchResponses = new AladinSearchResponses(List.of(aladinSearchResponse1, aladinSearchResponse2));
-        given(aladinService.searchBookByAladin(anyString(), any(Pageable.class))).willReturn(aladinSearchResponses);
+        var bookSearchResponse1 = createBookSearchResponse();
+        var bookSearchResponse2 = createBookSearchResponse();
+        var bookSearchResponses = List.of(bookSearchResponse1, bookSearchResponse2);
+        given(bookApiService.searchBooks(anyString(), any(Pageable.class))).willReturn(bookSearchResponses);
 
         // when
-        var bookSearchResponses = bookService.searchBooks(query, pageRequest);
+        var bookSearchResponsesSlice = bookService.searchBooks(query, pageRequest);
 
         // then
-        assertThat(bookSearchResponses.getContent()).hasSize(2);
-        assertThat(bookSearchResponses.hasNext()).isFalse();
+        assertThat(bookSearchResponsesSlice.getContent()).hasSize(2);
+        assertThat(bookSearchResponsesSlice.hasNext()).isFalse();
     }
 
     @DisplayName("isbn으로 도서를 상세조회한다.")
@@ -53,14 +52,14 @@ class BookServiceTest {
     void findBookDetail() {
         // given
         var isbn13 = "1234";
-        var aladinLookUpResponse = createAladinLookUpResponse(isbn13);
-        given(aladinService.findBookDetailByAladin(anyString())).willReturn(aladinLookUpResponse);
+        var bookDetailResponse = createBookDetailResponse(isbn13);
+        given(bookApiService.findBookDetail(anyString())).willReturn(bookDetailResponse);
 
         // when
-        var bookDetailResponse = bookService.findBookDetail(isbn13);
+        var bookServiceBookDetail = bookService.findBookDetail(isbn13);
 
         // then
-        assertThat(bookDetailResponse).extracting(
+        assertThat(bookServiceBookDetail).extracting(
             "imagePath",
             "title",
             "author",
@@ -68,48 +67,46 @@ class BookServiceTest {
             "isbn13",
             "page",
             "description",
-            "link"
+            "link",
+            "publishDate",
+            "categoryName"
         ).containsExactly(
-            aladinLookUpResponse.cover(),
-            aladinLookUpResponse.title(),
-            aladinLookUpResponse.author(),
-            aladinLookUpResponse.publisher(),
-            aladinLookUpResponse.isbn13(),
-            aladinLookUpResponse.subInfo().itemPage(),
-            aladinLookUpResponse.description(),
-            aladinLookUpResponse.link()
+            bookDetailResponse.imagePath(),
+            bookDetailResponse.title(),
+            bookDetailResponse.author(),
+            bookDetailResponse.publisher(),
+            bookDetailResponse.isbn13(),
+            bookDetailResponse.page(),
+            bookDetailResponse.description(),
+            bookDetailResponse.link(),
+            bookDetailResponse.publishDate(),
+            bookDetailResponse.categoryName()
         );
     }
 
-    private AladinSearchResponse createAladinSearchResponse() {
-        return AladinSearchResponse.builder()
+    private BookSearchResponse createBookSearchResponse() {
+        return BookSearchResponse.builder()
             .title("title")
-            .link("https://")
             .author("author")
-            .pubDate(LocalDate.of(2020, 1, 1))
-            .description("description")
-            .isbn("1234")
-            .isbn13("123456")
-            .cover("https://")
-            .categoryId(1L)
+            .imagePath("https://")
             .publisher("publisher")
             .build();
     }
 
-    private AladinLookUpResponse createAladinLookUpResponse(
+    private BookDetailResponse createBookDetailResponse(
         String isbn13
     ) {
-        return AladinLookUpResponse.builder()
+        return BookDetailResponse.builder()
             .title("title")
             .author("author")
             .isbn13(isbn13)
-            .categoryId(1L)
-            .cover("https://")
+            .categoryName("국내 도서 > 컴퓨터 공학")
+            .imagePath("https://")
             .description("description")
             .publisher("publisher")
+            .publishDate(LocalDate.of(2023, 1, 1))
             .link("https://")
-            .pubDate(LocalDate.of(2020, 1, 1))
-            .subInfo(new AladinLookUpResponse.AladinSubInfo(200))
+            .page(200)
             .build();
     }
 }
