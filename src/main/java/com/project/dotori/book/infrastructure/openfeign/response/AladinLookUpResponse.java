@@ -1,5 +1,6 @@
-package com.project.dotori.book.application.response;
+package com.project.dotori.book.infrastructure.openfeign.response;
 
+import com.project.dotori.book.application.response.BookDetailResponse;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ public record AladinLookUpResponse(
     LocalDate pubDate,
     String isbn13,
     String cover,
-    Long categoryId,
+    String categoryName,
     String publisher,
     AladinSubInfo subInfo
 ) {
@@ -26,6 +27,8 @@ public record AladinLookUpResponse(
             .author(author)
             .publisher(publisher)
             .isbn13(isbn13)
+            .categoryName(categoryName)
+            .publishDate(pubDate)
             .description(description)
             .link(link)
             .build();

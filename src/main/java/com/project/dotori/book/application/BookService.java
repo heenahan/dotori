@@ -12,22 +12,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookService {
 
-    private final AladinService aladinService;
+    private final BookApiService bookApiService;
 
     public BookDetailResponse findBookDetail(
         String isbn
     ) {
-        var aladinLookUpResponse = aladinService.findBookDetailByAladin(isbn);
-
-        return aladinLookUpResponse.toBookDetailResponse();
+        return bookApiService.findBookDetail(isbn);
     }
 
     public Slice<BookSearchResponse> searchBooks(
         String query,
         Pageable pageable
     ) {
-        var aladinSearchResponses = aladinService.searchBookByAladin(query, pageable);
-        var bookSearchResponses = aladinSearchResponses.toBookSearchResponses();
+        var bookSearchResponses = bookApiService.searchBooks(query, pageable);
 
         return SliceConverter.toSlice(bookSearchResponses, pageable);
     }
