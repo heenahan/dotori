@@ -52,8 +52,9 @@ class BookControllerTest extends RestDocsSupport {
             .description("영어를 쉽게 배울 수 있는 기회!")
             .publishDate(LocalDate.of(2023, 1, 1))
             .link("https://")
-            .imagePath("https://")
+            .coverPath("https://")
             .page(300)
+            .categoryId(1L)
             .categoryName("국내도서>영어")
             .isbn13(isbn)
             .publisher("조은교육")
@@ -73,7 +74,7 @@ class BookControllerTest extends RestDocsSupport {
         .andExpect(jsonPath("$.data.description").value(bookDetailResponse.description()))
         .andExpect(jsonPath("$.data.publishDate").value(bookDetailResponse.publishDate().toString()))
         .andExpect(jsonPath("$.data.link").value(bookDetailResponse.link()))
-        .andExpect(jsonPath("$.data.imagePath").value(bookDetailResponse.imagePath()))
+        .andExpect(jsonPath("$.data.coverPath").value(bookDetailResponse.coverPath()))
         .andExpect(jsonPath("$.data.page").value(bookDetailResponse.page()))
         .andExpect(jsonPath("$.data.categoryName").value(bookDetailResponse.categoryName()))
         .andExpect(jsonPath("$.data.isbn13").value(bookDetailResponse.isbn13()))
@@ -91,8 +92,9 @@ class BookControllerTest extends RestDocsSupport {
                 fieldWithPath("data.description").type(JsonFieldType.STRING).description("책의 설명"),
                 fieldWithPath("data.publishDate").type(JsonFieldType.STRING).description("책의 출판일"),
                 fieldWithPath("data.link").type(JsonFieldType.STRING).description("책의 구매 링크"),
-                fieldWithPath("data.imagePath").type(JsonFieldType.STRING).description("책의 이미지 경로"),
+                fieldWithPath("data.coverPath").type(JsonFieldType.STRING).description("책의 이미지 경로"),
                 fieldWithPath("data.page").type(JsonFieldType.NUMBER).description("책의 페이지 수"),
+                fieldWithPath("data.categoryId").type(JsonFieldType.NUMBER).description("책의 카테고리 아이디"),
                 fieldWithPath("data.categoryName").type(JsonFieldType.STRING).description("책의 카테고리 이름"),
                 fieldWithPath("data.isbn13").type(JsonFieldType.STRING).description("책의 Isbn13"),
                 fieldWithPath("data.publisher").type(JsonFieldType.STRING).description("책의 출판사")
@@ -109,13 +111,13 @@ class BookControllerTest extends RestDocsSupport {
         var bookSearchResponse1 = BookSearchResponse.builder()
             .title("영어가 쉽다!")
             .author("김작가")
-            .imagePath("https://")
+            .coverPath("https://")
             .publisher("조은교육")
             .build();
         var bookSearchResponse2 = BookSearchResponse.builder()
             .title("영어랑 놀자")
             .author("박작가")
-            .imagePath("https://")
+            .coverPath("https://")
             .publisher("행복도서")
             .build();
         var bookSearchResponses = List.of(bookSearchResponse1, bookSearchResponse2);
@@ -138,7 +140,7 @@ class BookControllerTest extends RestDocsSupport {
                 fieldWithPath("data.content[]").type(JsonFieldType.ARRAY).description("검색된 책 목록"),
                 fieldWithPath("data.content[].title").type(JsonFieldType.STRING).description("책의 제목"),
                 fieldWithPath("data.content[].author").type(JsonFieldType.STRING).description("책의 저자"),
-                fieldWithPath("data.content[].imagePath").type(JsonFieldType.STRING).description("책의 이미지 경로"),
+                fieldWithPath("data.content[].coverPath").type(JsonFieldType.STRING).description("책의 이미지 경로"),
                 fieldWithPath("data.content[].publisher").type(JsonFieldType.STRING).description("책의 출판사"),
                 fieldWithPath("data.pageable.pageNumber").type(JsonFieldType.NUMBER)
                     .description("현재 페이지 번호"),
