@@ -21,7 +21,7 @@ public record AladinSearchResponse(
 
     public BookSearchResponse toBookSearchResponse() {
         return BookSearchResponse.builder()
-            .imagePath(cover)
+            .coverPath(cover)
             .author(author)
             .title(title)
             .publisher(publisher)

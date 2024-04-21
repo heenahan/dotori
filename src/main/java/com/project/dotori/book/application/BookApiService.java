@@ -5,10 +5,11 @@ import com.project.dotori.book.application.response.BookSearchResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookApiService {
 
-    BookDetailResponse findBookDetail(String isbn13);
+    Optional<BookDetailResponse> findBookDetail(String isbn13);
 
     List<BookSearchResponse> searchBooks(String query, Pageable pageable);
 }
