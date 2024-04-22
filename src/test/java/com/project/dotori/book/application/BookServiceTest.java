@@ -61,7 +61,7 @@ class BookServiceTest {
 
         // then
         assertThat(bookServiceBookDetail).extracting(
-            "imagePath",
+            "coverPath",
             "title",
             "author",
             "publisher",
