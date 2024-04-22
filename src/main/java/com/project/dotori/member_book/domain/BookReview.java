@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -55,10 +56,10 @@ public class BookReview {
     private void validStar(
         Float star
     ) {
-        if (star < 0.0 || star > 5.0) {
+        if (Objects.nonNull(star) && (star < 0.0 || star > 5.0)) {
             throw new BusinessException(ErrorCode.INVALID_RANGE, INVALID_STAR_RANGE.formatted(star));
         }
-        if (star % 1 != 0.0 && star % 1 != 0.5) {
+        if (Objects.nonNull(star) && (star % 1 != 0.0 && star % 1 != 0.5)) {
             throw new BusinessException(ErrorCode.INVALID_RANGE, INVALID_STAR_DECIMAL.formatted(star));
         }
     }
