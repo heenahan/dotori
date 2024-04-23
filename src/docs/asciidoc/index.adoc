@@ -13,3 +13,8 @@ endif::[]
 == 책 도메인 API
 
 include::book/book.adoc[]
+
+[[Member-Book-API]]
+== 독서 기록 도메인 API
+
+include::member_book/member_book.adoc[]
