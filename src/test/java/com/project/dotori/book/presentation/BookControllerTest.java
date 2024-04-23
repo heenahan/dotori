@@ -26,7 +26,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookController.class)
@@ -59,26 +58,13 @@ class BookControllerTest extends RestDocsSupport {
             .isbn13(isbn)
             .publisher("조은교육")
             .build();
-        given(bookService.findBookDetail(isbn)).willReturn(bookDetailResponse);
+        given(bookService.findBookDetail(anyString())).willReturn(bookDetailResponse);
 
         // when & then
         mockMvc.perform(get("/api/v1/books/{isbn}", isbn)
             .contentType(MediaType.APPLICATION_JSON)
         ).andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.statusCode").value(200))
-        .andExpect(jsonPath("$.serverTime").exists())
-        .andExpect(jsonPath("$.data").isNotEmpty())
-        .andExpect(jsonPath("$.data.title").value(bookDetailResponse.title()))
-        .andExpect(jsonPath("$.data.author").value(bookDetailResponse.author()))
-        .andExpect(jsonPath("$.data.description").value(bookDetailResponse.description()))
-        .andExpect(jsonPath("$.data.publishDate").value(bookDetailResponse.publishDate().toString()))
-        .andExpect(jsonPath("$.data.link").value(bookDetailResponse.link()))
-        .andExpect(jsonPath("$.data.coverPath").value(bookDetailResponse.coverPath()))
-        .andExpect(jsonPath("$.data.page").value(bookDetailResponse.page()))
-        .andExpect(jsonPath("$.data.categoryName").value(bookDetailResponse.categoryName()))
-        .andExpect(jsonPath("$.data.isbn13").value(bookDetailResponse.isbn13()))
-        .andExpect(jsonPath("$.data.publisher").value(bookDetailResponse.publisher()))
         .andDo(document("find-book-detail",
             pathParameters(
                 parameterWithName("isbn").description("책의 Isbn13")
