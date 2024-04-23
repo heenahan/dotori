@@ -4,9 +4,10 @@ import com.project.dotori.book.application.BookReader;
 import com.project.dotori.book.domain.Book;
 import com.project.dotori.book.domain.repository.BookRepository;
 import com.project.dotori.member_book.application.request.MemberBookServiceRequest;
+import com.project.dotori.member_book.application.response.MemberBookResponse;
+import com.project.dotori.member_book.domain.MemberBook;
 import com.project.dotori.member_book.domain.repository.MemberBookRecordRepository;
 import com.project.dotori.member_book.domain.repository.MemberBookRepository;
-import com.project.dotori.member_book.presentation.response.MemberBookResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ public class MemberBookService {
 
     private final BookRepository bookRepository;
     private final BookReader bookReader;
+    private final MemberBookValidator memberBookValidator;
     private final MemberBookRepository memberBookRepository;
     private final MemberBookRecordRepository memberBookRecordRepository;
 
@@ -26,6 +28,8 @@ public class MemberBookService {
         Long memberId,
         MemberBookServiceRequest request
     ) {
+        memberBookValidator.validMemberBook(memberId, request.isbn());
+
         // 도서 정보 확인
         var book = findBook(request.isbn());
 
@@ -34,11 +38,7 @@ public class MemberBookService {
         memberBookRepository.save(memberBook);
 
         // 도서 기록 저장
-        if (!memberBook.isToRead()) {
-            var page = book.getBookBasicInfo().getPage();
-            var memberBookRecord = request.toEntity(memberBook.getId(), page);
-            memberBookRecordRepository.save(memberBookRecord);
-        }
+        createMemberBookRecord(memberBook, book, request);
 
         return MemberBookResponse.from(memberBook);
     }
@@ -52,5 +52,17 @@ public class MemberBookService {
         }
         var bookDetailResponse = bookReader.findBookDetailAsync(isbn);
         return bookRepository.save(bookDetailResponse.toEntity());
+    }
+
+    private void createMemberBookRecord(
+        MemberBook memberBook,
+        Book book,
+        MemberBookServiceRequest request
+    ) {
+        if (!memberBook.isToRead()) {
+            var page = book.getBookBasicInfo().getPage();
+            var memberBookRecord = request.toEntity(memberBook.getId(), page);
+            memberBookRecordRepository.save(memberBookRecord);
+        }
     }
 }
