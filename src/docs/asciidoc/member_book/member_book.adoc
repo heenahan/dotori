@@ -11,3 +11,17 @@ include::{snippets}/create-member-book/request-body.adoc[]
 include::{snippets}/create-member-book/http-response.adoc[]
 include::{snippets}/create-member-book/response-headers.adoc[]
 include::{snippets}/create-member-book/response-body.adoc[]
+
+[[update-member-book]]
+=== 독서 기록을 수정한다.
+
+==== HTTP Request
+
+include::{snippets}/update-member-book/http-request.adoc[]
+include::{snippets}/update-member-book/path-parameters.adoc[]
+include::{snippets}/update-member-book/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/update-member-book/http-response.adoc[]
+include::{snippets}/update-member-book/response-fields.adoc[]
