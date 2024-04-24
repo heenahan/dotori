@@ -2,13 +2,13 @@ package com.project.dotori.member_book.application.response;
 
 import com.project.dotori.member_book.domain.MemberBook;
 
-public record MemberBookResponse(
+public record MemberBookCreateResponse(
     Long memberBookId
 ) {
 
-    public static MemberBookResponse from(
+    public static MemberBookCreateResponse from(
         MemberBook memberBook
     ) {
-        return new MemberBookResponse(memberBook.getId());
+        return new MemberBookCreateResponse(memberBook.getId());
     }
 }
