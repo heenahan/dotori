@@ -2,25 +2,31 @@ package com.project.dotori.member_book.application.request;
 
 import com.project.dotori.member_book.domain.BookLevel;
 import com.project.dotori.member_book.domain.MemberBook;
-import com.project.dotori.member_book.domain.MemberBookRecord;
 import com.project.dotori.member_book.domain.MemberBookStatus;
 import lombok.Builder;
 
 import java.time.LocalDate;
 
 @Builder
-public record MemberBookServiceRequest(
-    String isbn,
+public record MemberBookUpdateServiceRequest(
+    Long memberBookId,
+
     LocalDate startDate,
+
     LocalDate endDate,
-    Integer page,
+
+    int page,
+
     Float star,
+
     BookLevel bookLevel,
+
     MemberBookStatus memberBookStatus
 ) {
 
-    public static MemberBookServiceRequest from(
-        String isbn,
+
+    public static MemberBookUpdateServiceRequest from(
+        Long memberBookId,
         LocalDate startDate,
         LocalDate endDate,
         Integer page,
@@ -28,8 +34,8 @@ public record MemberBookServiceRequest(
         String bookLevel,
         String memberBookStatus
     ) {
-        return MemberBookServiceRequest.builder()
-            .isbn(isbn)
+        return MemberBookUpdateServiceRequest.builder()
+            .memberBookId(memberBookId)
             .startDate(startDate)
             .endDate(endDate)
             .page(page)
@@ -40,25 +46,14 @@ public record MemberBookServiceRequest(
     }
 
     public MemberBook toEntity(
-        Long memberId
-    ) {
-        return MemberBook.builder()
-            .memberId(memberId)
-            .bookId(isbn)
-            .memberBookStatus(memberBookStatus)
-            .build();
-    }
-
-    public MemberBookRecord toEntity(
-        Long memberBookId,
         Integer totalPage
     ) {
-        return MemberBookRecord.builder()
-            .memberBookId(memberBookId)
+        return MemberBook.builder()
+            .memberBookStatus(memberBookStatus)
             .startDate(startDate)
             .endDate(endDate)
-            .page(page)
             .totalPage(totalPage)
+            .page(page)
             .star(star)
             .bookLevel(bookLevel)
             .build();

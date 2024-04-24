@@ -2,6 +2,8 @@ package com.project.dotori.book.application;
 
 import com.project.dotori.book.application.response.BookDetailResponse;
 import com.project.dotori.book.application.response.BookSearchResponse;
+import com.project.dotori.book.domain.Book;
+import com.project.dotori.book.domain.repository.BookRepository;
 import com.project.dotori.global.exception.BusinessException;
 import com.project.dotori.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,14 @@ public class BookReader {
     private static final String NOT_FOUND_BOOK = "책을 찾을 수 없습니다. 옳바르지 못한 isbn13입니다. value = %s";
 
     private final BookApiService bookApiService;
+    private final BookRepository bookRepository;
+
+    public Book findOne(
+        String isbn
+    ) {
+        return bookRepository.findById(isbn)
+            .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, NOT_FOUND_BOOK.formatted(isbn)));
+    }
 
     public BookDetailResponse findBookDetail(
         String isbn
