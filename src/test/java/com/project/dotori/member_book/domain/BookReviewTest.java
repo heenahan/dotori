@@ -4,10 +4,7 @@ import com.project.dotori.global.exception.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.stream.Stream;
 
@@ -65,6 +62,22 @@ class BookReviewTest {
             .hasMessage("star의 소수점은 0이거나 5이어야 합니다. value = %f".formatted(star));
     }
 
+    @DisplayName("page와 totalPage가 음수이면 예외가 발생한다.")
+    @CsvSource(value = { "-1 0", "0 -1" }, delimiter = ' ')
+    @ParameterizedTest
+    void validPage(
+        int page,
+        int totalPage
+    ) {
+        assertThatThrownBy(() -> BookReview.builder()
+            .page(page)
+            .totalPage(totalPage)
+            .star(4.0f)
+            .bookLevel(BookLevel.EASY)
+            .build()
+        ).isInstanceOf(BusinessException.class);
+    }
+
     @DisplayName("page와 totalPage로 독서량을 계산한다.")
     @MethodSource("validPage")
     @ParameterizedTest
@@ -104,6 +117,7 @@ class BookReviewTest {
 
     static Stream<Arguments> validPage() {
         return Stream.of(
+            Arguments.arguments(0, 0, 0),
             Arguments.arguments(1, 300, 0),
             Arguments.arguments(100, 100, 100),
             Arguments.arguments(33, 100, 33),

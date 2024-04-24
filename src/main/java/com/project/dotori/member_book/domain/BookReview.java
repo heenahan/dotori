@@ -26,10 +26,10 @@ public class BookReview {
     private static final String INVALID_STAR_DECIMAL = "star의 소수점은 0이거나 5이어야 합니다. value = %f";
 
     @Column(name = "page", nullable = false)
-    private Integer page = 0;
+    private int page = 0;
 
     @Column(name = "percentage", nullable = false)
-    private Integer percentage = 0;
+    private int percentage = 0;
 
     @Column(name = "star", nullable = true)
     private Float star;
@@ -40,8 +40,8 @@ public class BookReview {
 
     @Builder
     private BookReview(
-        Integer page,
-        Integer totalPage,
+        int page,
+        int totalPage,
         Float star,
         BookLevel bookLevel
     ) {
@@ -77,19 +77,19 @@ public class BookReview {
     }
 
     private Integer limitPage(
-        Integer page,
-        Integer totalPage
+        int page,
+        int totalPage
     ) {
-        if (page > totalPage) {
-            return totalPage;
-        }
-        return page;
+        return Math.min(page, totalPage);
     }
 
-    private Integer calculatePercentage(
-        Integer page,
-        Integer totalPage
+    private int calculatePercentage(
+        int page,
+        int totalPage
     ) {
+        if (totalPage == 0) {
+            return 0;
+        }
         var totalPageBigDecimal = BigDecimal.valueOf(totalPage);
         var pageBigDecimal = BigDecimal.valueOf(page);
         var oneHundred = BigDecimal.valueOf(100);
