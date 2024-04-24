@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record BookSearchResponse(
-    String imagePath,
+    String coverPath,
     String title,
     String author,
     String publisher

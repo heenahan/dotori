@@ -1,7 +1,6 @@
 package com.project.dotori.book.domain;
 
 import com.project.dotori.StringRandomGenerator;
-import com.project.dotori.book.domain.BookBasicInfo;
 import com.project.dotori.global.exception.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,28 +12,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BookBasicInfoTest {
 
     @DisplayName("유효하지 않는 isbn, title, author은 예외가 발생한다.")
     @Nested
     class LengthTest {
-
-        @DisplayName("isbn이 빈칸이거나 13자를 초과하면 예외가 발생한다.")
-        @MethodSource("invalidIsbn")
-        @ParameterizedTest
-        void validIsbn(String isbn) {
-            // when & then
-            assertThatThrownBy(() ->
-                    BookBasicInfo.builder()
-                        .isbn(isbn)
-                        .title("title")
-                        .author("author")
-                        .page(100)
-                        .build())
-                .isInstanceOf(BusinessException.class);
-        }
 
         @DisplayName("title이 빈칸이거나 50자를 초과하면 예외가 발생한다.")
         @MethodSource("invalidTitle")
@@ -43,7 +27,6 @@ class BookBasicInfoTest {
             // when & then
             assertThatThrownBy(() ->
                     BookBasicInfo.builder()
-                        .isbn("isbn")
                         .title(title)
                         .author("author")
                         .page(100)
@@ -58,20 +41,11 @@ class BookBasicInfoTest {
             // when & then
             assertThatThrownBy(() ->
                     BookBasicInfo.builder()
-                        .isbn("isbn")
                         .title("title")
                         .author(author)
                         .page(100)
                         .build())
                 .isInstanceOf(BusinessException.class);
-        }
-
-        static Stream<Arguments> invalidIsbn() {
-            return Stream.of(
-                null,
-                Arguments.arguments(""),
-                Arguments.arguments(StringRandomGenerator.generate(14))
-            );
         }
 
         static Stream<Arguments> invalidTitle() {
@@ -103,7 +77,6 @@ class BookBasicInfoTest {
             // when & then
             assertThatThrownBy(() ->
                     BookBasicInfo.builder()
-                        .isbn("isbn")
                         .title("title")
                         .author("author")
                         .page(page)

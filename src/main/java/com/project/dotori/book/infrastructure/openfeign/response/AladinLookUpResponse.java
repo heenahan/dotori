@@ -21,7 +21,7 @@ public record AladinLookUpResponse(
 
     public BookDetailResponse toBookDetailResponse() {
         return BookDetailResponse.builder()
-            .imagePath(cover)
+            .coverPath(cover)
             .title(title)
             .page(subInfo().itemPage)
             .author(author)

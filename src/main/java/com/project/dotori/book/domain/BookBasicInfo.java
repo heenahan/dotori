@@ -15,13 +15,9 @@ import org.apache.commons.lang3.StringUtils;
 @Embeddable
 public class BookBasicInfo {
 
-    private static final String INVALID_ISBN = "isbn은 13자 이하여야 합니다. length = %d";
     private static final String INVALID_TITLE = "제목은 50자 이하여야 합니다. length = %d";
     private static final String INVALID_AUTHOR = "작가 이름은 50자 이하여야 합니다. length = %d";
     private static final String INVALID_PAGE = "페이지 수는 0이상 이여야 합니다. value = %d";
-
-    @Column(name = "isbn", length = 13, nullable = false)
-    private String isbn;
 
     @Column(name = "title", length = 50, nullable = false)
     private String title;
@@ -34,27 +30,21 @@ public class BookBasicInfo {
 
     @Builder
     private BookBasicInfo(
-        String isbn,
         String title,
         String author,
         Integer page
     ) {
-        validLength(isbn, title, author);
+        validLength(title, author);
         validNumber(page);
-        this.isbn = isbn;
         this.title = title;
         this.author = author;
         this.page = page;
     }
 
     private void validLength(
-        String isbn,
         String title,
         String author
     ) {
-        if (StringUtils.isBlank(isbn) || isbn.length() > 13) {
-            throw new BusinessException(ErrorCode.INVALID_LENGTH, INVALID_ISBN.formatted(StringUtils.length(isbn)));
-        }
         if (StringUtils.isBlank(title) || title.length() > 50) {
             throw new BusinessException(ErrorCode.INVALID_LENGTH, INVALID_TITLE.formatted(StringUtils.length(title)));
         }

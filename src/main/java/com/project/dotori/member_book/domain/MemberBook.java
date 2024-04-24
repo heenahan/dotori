@@ -20,7 +20,7 @@ public class MemberBook {
     private Long memberId;
 
     @Column(name = "book_id", nullable = false)
-    private Long bookId;
+    private String bookId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 30, nullable = false)
@@ -29,11 +29,15 @@ public class MemberBook {
     @Builder
     private MemberBook(
         Long memberId,
-        Long bookId,
+        String bookId,
         MemberBookStatus memberBookStatus
     ) {
         this.memberId = memberId;
         this.bookId = bookId;
         this.memberBookStatus = memberBookStatus;
+    }
+
+    public boolean isToRead() {
+        return this.memberBookStatus == MemberBookStatus.TO_READ;
     }
 }

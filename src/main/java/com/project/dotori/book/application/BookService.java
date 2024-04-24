@@ -12,19 +12,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookService {
 
-    private final BookApiService bookApiService;
+    private final BookReader bookReader;
 
     public BookDetailResponse findBookDetail(
         String isbn
     ) {
-        return bookApiService.findBookDetail(isbn);
+        return bookReader.findBookDetail(isbn);
     }
 
     public Slice<BookSearchResponse> searchBooks(
         String query,
         Pageable pageable
     ) {
-        var bookSearchResponses = bookApiService.searchBooks(query, pageable);
+        var bookSearchResponses = bookReader.searchBooks(query, pageable);
 
         return SliceConverter.toSlice(bookSearchResponses, pageable);
     }

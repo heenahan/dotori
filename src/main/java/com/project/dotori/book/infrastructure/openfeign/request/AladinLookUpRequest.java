@@ -1,9 +1,6 @@
 package com.project.dotori.book.infrastructure.openfeign.request;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter

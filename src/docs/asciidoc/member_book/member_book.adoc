@@ -1,0 +1,13 @@
+[[create-member-book]]
+=== 독서 기록을 생성한다.
+
+==== HTTP Request
+
+include::{snippets}/create-member-book/http-request.adoc[]
+include::{snippets}/create-member-book/request-body.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/create-member-book/http-response.adoc[]
+include::{snippets}/create-member-book/response-headers.adoc[]
+include::{snippets}/create-member-book/response-body.adoc[]

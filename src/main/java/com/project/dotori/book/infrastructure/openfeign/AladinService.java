@@ -1,16 +1,13 @@
 package com.project.dotori.book.infrastructure.openfeign;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.dotori.book.application.BookApiService;
+import com.project.dotori.book.application.response.BookDetailResponse;
+import com.project.dotori.book.application.response.BookSearchResponse;
 import com.project.dotori.book.infrastructure.openfeign.request.AladinLookUpRequest;
 import com.project.dotori.book.infrastructure.openfeign.request.AladinSearchRequest;
 import com.project.dotori.book.infrastructure.openfeign.response.AladinLookUpResponse;
 import com.project.dotori.book.infrastructure.openfeign.response.AladinSearchResponses;
-import com.project.dotori.book.application.response.BookDetailResponse;
-import com.project.dotori.book.application.response.BookSearchResponse;
-import com.project.dotori.global.exception.BusinessException;
-import com.project.dotori.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -19,14 +16,12 @@ import org.springframework.web.server.ServerErrorException;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class AladinService implements BookApiService {
-
-    private static final String NOT_FOUND_BOOK = "책을 찾을 수 없습니다. 옳바르지 못한 isbn13입니다. value = %s";
 
     private final AladinOpenFeign aladinOpenFeign;
     private final AladinConfig aladinConfig;
@@ -54,7 +49,7 @@ public class AladinService implements BookApiService {
     }
 
     @Override
-    public BookDetailResponse findBookDetail(
+    public Optional<BookDetailResponse> findBookDetail(
         String isbn13
     ) {
         try {
@@ -65,24 +60,17 @@ public class AladinService implements BookApiService {
             var response = aladinOpenFeign.findBookDetail(lookUpURI, request);
 
             var jsonNode = objectMapper.readTree(response).get("item");
-            validBook(isbn13, jsonNode);
+            if (jsonNode == null) {
+                return Optional.empty();
+            }
 
             var elements = jsonNode.elements();
             var aladinLookUpResponse = objectMapper.treeToValue(elements.next(), AladinLookUpResponse.class);
 
-            return aladinLookUpResponse.toBookDetailResponse();
+            return Optional.of(aladinLookUpResponse.toBookDetailResponse());
         } catch (IOException e) {
             log.warn("json을 객체로 변환하는 과정에서 예외가 발생했습니다. exception : ", e);
             throw new ServerErrorException("서버에서 예기치못한 문제가 발생했습니다.", e);
-        }
-    }
-
-    private void validBook(
-        String isbn13,
-        JsonNode jsonNode
-    ) {
-        if (Objects.isNull(jsonNode)) {
-            throw new BusinessException(ErrorCode.NOT_FOUND, NOT_FOUND_BOOK.formatted(isbn13));
         }
     }
 }

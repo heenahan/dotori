@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -53,14 +54,14 @@ class BookServiceTest {
         // given
         var isbn13 = "1234";
         var bookDetailResponse = createBookDetailResponse(isbn13);
-        given(bookApiService.findBookDetail(anyString())).willReturn(bookDetailResponse);
+        given(bookApiService.findBookDetail(anyString())).willReturn(Optional.of(bookDetailResponse));
 
         // when
         var bookServiceBookDetail = bookService.findBookDetail(isbn13);
 
         // then
         assertThat(bookServiceBookDetail).extracting(
-            "imagePath",
+            "coverPath",
             "title",
             "author",
             "publisher",
@@ -71,7 +72,7 @@ class BookServiceTest {
             "publishDate",
             "categoryName"
         ).containsExactly(
-            bookDetailResponse.imagePath(),
+            bookDetailResponse.coverPath(),
             bookDetailResponse.title(),
             bookDetailResponse.author(),
             bookDetailResponse.publisher(),
@@ -88,7 +89,7 @@ class BookServiceTest {
         return BookSearchResponse.builder()
             .title("title")
             .author("author")
-            .imagePath("https://")
+            .coverPath("https://")
             .publisher("publisher")
             .build();
     }
@@ -101,7 +102,7 @@ class BookServiceTest {
             .author("author")
             .isbn13(isbn13)
             .categoryName("국내 도서 > 컴퓨터 공학")
-            .imagePath("https://")
+            .coverPath("https://")
             .description("description")
             .publisher("publisher")
             .publishDate(LocalDate.of(2023, 1, 1))

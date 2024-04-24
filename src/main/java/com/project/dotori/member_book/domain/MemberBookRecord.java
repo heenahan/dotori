@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member_book_records")
@@ -28,11 +30,23 @@ public class MemberBookRecord {
     @Builder
     private MemberBookRecord(
         Long memberBookId,
-        ReadingDate readingDate,
-        BookReview bookReview
+        LocalDate startDate,
+        LocalDate endDate,
+        Integer page,
+        Integer totalPage,
+        Float star,
+        BookLevel bookLevel
     ) {
         this.memberBookId = memberBookId;
-        this.readingDate = readingDate;
-        this.bookReview = bookReview;
+        this.readingDate = ReadingDate.builder()
+            .startDate(startDate)
+            .endDate(endDate)
+            .build();
+        this.bookReview = BookReview.builder()
+            .page(page)
+            .totalPage(totalPage)
+            .star(star)
+            .bookLevel(bookLevel)
+            .build();
     }
 }
