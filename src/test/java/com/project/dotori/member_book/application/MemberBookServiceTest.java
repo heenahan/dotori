@@ -2,10 +2,11 @@ package com.project.dotori.member_book.application;
 
 import com.project.dotori.book.domain.Book;
 import com.project.dotori.book.domain.repository.BookRepository;
-import com.project.dotori.member_book.application.request.MemberBookServiceRequest;
+import com.project.dotori.member_book.application.request.MemberBookCreateServiceRequest;
+import com.project.dotori.member_book.application.request.MemberBookUpdateServiceRequest;
 import com.project.dotori.member_book.domain.BookLevel;
+import com.project.dotori.member_book.domain.MemberBook;
 import com.project.dotori.member_book.domain.MemberBookStatus;
-import com.project.dotori.member_book.domain.repository.MemberBookRecordRepository;
 import com.project.dotori.member_book.domain.repository.MemberBookRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,14 +35,11 @@ class MemberBookServiceTest {
     @Autowired
     private MemberBookRepository memberBookRepository;
 
-    @Autowired
-    private MemberBookRecordRepository memberBookRecordRepository;
-
-    @DisplayName("읽음과 읽는 중 상태일 때 MemberBook과 MemberBookRecord를 저장한다.")
+    @DisplayName("상태에 따라 멤버의 독서 기록을 저장한다.")
     @MethodSource("memberBookServiceRequests")
     @ParameterizedTest
     void createMemberBook(
-        MemberBookServiceRequest request
+        MemberBookCreateServiceRequest request
     ) {
         // given
         var memberId = 1L;
@@ -49,7 +47,7 @@ class MemberBookServiceTest {
         bookRepository.save(book);
 
         // when
-        var response = memberBookService.createMemberBookRead(memberId, request);
+        var response = memberBookService.createMemberBook(memberId, request);
 
         // then
         var memberBookOptional = memberBookRepository.findById(response.memberBookId());
@@ -58,44 +56,53 @@ class MemberBookServiceTest {
         assertThat(memberBook).extracting(
             "memberId",
             "bookId",
-            "memberBookStatus"
-        ).containsExactly(memberId, book.getIsbn(), request.memberBookStatus());
-        var memberBookRecordOptional = memberBookRecordRepository.findByMemberBookId(response.memberBookId());
-        assertThat(memberBookRecordOptional).isNotEmpty();
-        var memberBookRecord = memberBookRecordOptional.get();
-        assertThat(memberBookRecord).extracting(
-            "memberBookId",
+            "memberBookStatus",
             "readingDate.startDate",
             "readingDate.endDate",
             "bookReview.page",
             "bookReview.star",
             "bookReview.bookLevel"
-        ).containsExactly(response.memberBookId(), request.startDate(), request.endDate(), request.page(), request.star(), request.bookLevel());
+        ).containsExactly(memberId, book.getIsbn(), request.memberBookStatus(), request.startDate(), request.endDate(), request.page(), request.star(), request.bookLevel());
     }
 
-    @DisplayName("읽을 예정 상태일 때 MemberBook만 저장한다.")
+    @DisplayName("독서 기록을 수정한다.")
     @Test
-    void createMemberBookToRead() {
+    void updateMemberBook() {
         // given
         var memberId = 1L;
-        var request = createMemberBookServiceRequest();
-        var book = createBook(request.isbn());
+        var page = 300;
+        var isbn = "1234";
+        var book = createBook(isbn, page);
+        var memberBook = createMemberBook(book, memberId);
         bookRepository.save(book);
+        var savedMemberBook = memberBookRepository.save(memberBook);
+        var request = new MemberBookUpdateServiceRequest(
+            savedMemberBook.getId(),
+            LocalDate.of(2024, 4, 10),
+            null,
+            200,
+            null,
+            null,
+            MemberBookStatus.READING
+        );
 
         // when
-        var response = memberBookService.createMemberBookRead(memberId, request);
+        memberBookService.updateMemberBook(memberId, request);
 
         // then
-        var memberBookOptional = memberBookRepository.findById(response.memberBookId());
+        var memberBookOptional = memberBookRepository.findById(savedMemberBook.getId());
         assertThat(memberBookOptional).isNotEmpty();
-        var memberBook = memberBookOptional.get();
-        assertThat(memberBook).extracting(
+        var updatedMemberBook = memberBookOptional.get();
+        assertThat(updatedMemberBook).extracting(
             "memberId",
             "bookId",
-            "memberBookStatus"
-        ).containsExactly(memberId, book.getIsbn(), request.memberBookStatus());
-        var memberBookRecordOptional = memberBookRecordRepository.findByMemberBookId(response.memberBookId());
-        assertThat(memberBookRecordOptional).isEmpty();
+            "memberBookStatus",
+            "readingDate.startDate",
+            "readingDate.endDate",
+            "bookReview.page",
+            "bookReview.star",
+            "bookReview.bookLevel"
+        ).containsExactly(memberId, book.getIsbn(), request.memberBookStatus(), request.startDate(), request.endDate(), request.page(), request.star(), request.bookLevel());
     }
 
     private Book createBook(
@@ -114,18 +121,52 @@ class MemberBookServiceTest {
             .build();
     }
 
-    private MemberBookServiceRequest createMemberBookServiceRequest() {
-        return new MemberBookServiceRequest("1234", null, null, 0, null, null, MemberBookStatus.TO_READ);
+    private Book createBook(
+        String isbn,
+        Integer page
+    ) {
+        return Book.builder()
+            .isbn(isbn)
+            .title("title")
+            .author("author")
+            .coverPath("https://")
+            .publishDate(LocalDate.of(2023, 1, 1))
+            .categoryId(1L)
+            .page(page)
+            .description("description")
+            .publisher("publisher")
+            .build();
+    }
+
+    private MemberBook createMemberBook(
+        Book book,
+        Long memberId
+    ) {
+        return MemberBook.builder()
+            .bookId(book.getIsbn())
+            .memberId(memberId)
+            .memberBookStatus(MemberBookStatus.READ)
+            .startDate(LocalDate.of(2024, 4, 1))
+            .endDate(LocalDate.of(2024, 4, 20))
+            .totalPage(book.getBookBasicInfo().getPage())
+            .build();
+    }
+
+    private MemberBookCreateServiceRequest createMemberBookServiceRequest() {
+        return new MemberBookCreateServiceRequest("1234", null, null, 0, null, null, MemberBookStatus.TO_READ);
 
     }
 
     private static Stream<Arguments> memberBookServiceRequests() {
         return Stream.of(
             Arguments.arguments(
-                new MemberBookServiceRequest("1234", LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 20), 200, 4.5f, BookLevel.EASY, MemberBookStatus.READ)
+                new MemberBookCreateServiceRequest("1234", LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 20), 200, 4.5f, BookLevel.EASY, MemberBookStatus.READ)
             ),
             Arguments.arguments(
-                new MemberBookServiceRequest("1234", LocalDate.of(2024, 4, 1), null, 100, null, null, MemberBookStatus.READING)
+                new MemberBookCreateServiceRequest("1234", LocalDate.of(2024, 4, 1), null, 100, null, null, MemberBookStatus.READING)
+            ),
+            Arguments.arguments(
+                new MemberBookCreateServiceRequest("1234", null, null, 0, null, null, MemberBookStatus.TO_READ)
             )
         );
     }
