@@ -20,7 +20,7 @@ public class ReadingDate {
     private static final String INVALID_DATE_FORMAT = "독서 시작일과 종료일에 0이 들어갈 수 없습니다. startDate = %s, endDate = %s";
     private static final String INVALID_DATE = "독서 종료일은 시작일과 같거나 미래여야 합니다. startDate = %s, endDate = %s";
 
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date", nullable = true)
     private LocalDate startDate;
 
     @Column(name = "end_date", nullable = true)
@@ -40,7 +40,7 @@ public class ReadingDate {
         LocalDate startDate,
         LocalDate endDate
     ) {
-        if (startDate.getYear() == 0  || (Objects.nonNull(endDate) && endDate.getYear() == 0)) {
+        if ((Objects.nonNull(startDate) && startDate.getYear() == 0)  || (Objects.nonNull(endDate) && endDate.getYear() == 0)) {
             throw new BusinessException(ErrorCode.INVALID_DATE, INVALID_DATE_FORMAT.formatted(startDate, endDate));
         }
         if (Objects.nonNull(endDate) && endDate.isBefore(startDate)) {
