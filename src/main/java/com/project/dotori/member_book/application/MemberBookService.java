@@ -3,10 +3,9 @@ package com.project.dotori.member_book.application;
 import com.project.dotori.book.application.BookReader;
 import com.project.dotori.book.domain.Book;
 import com.project.dotori.book.domain.repository.BookRepository;
-import com.project.dotori.member_book.application.request.MemberBookServiceRequest;
-import com.project.dotori.member_book.application.response.MemberBookResponse;
-import com.project.dotori.member_book.domain.MemberBook;
-import com.project.dotori.member_book.domain.repository.MemberBookRecordRepository;
+import com.project.dotori.member_book.application.request.MemberBookCreateServiceRequest;
+import com.project.dotori.member_book.application.request.MemberBookUpdateServiceRequest;
+import com.project.dotori.member_book.application.response.MemberBookCreateResponse;
 import com.project.dotori.member_book.domain.repository.MemberBookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,14 +18,15 @@ public class MemberBookService {
 
     private final BookRepository bookRepository;
     private final BookReader bookReader;
+
     private final MemberBookValidator memberBookValidator;
+    private final MemberBookReader memberBookReader;
     private final MemberBookRepository memberBookRepository;
-    private final MemberBookRecordRepository memberBookRecordRepository;
 
     @Transactional
-    public MemberBookResponse createMemberBookRead(
+    public MemberBookCreateResponse createMemberBook(
         Long memberId,
-        MemberBookServiceRequest request
+        MemberBookCreateServiceRequest request
     ) {
         memberBookValidator.validMemberBook(memberId, request.isbn());
 
@@ -34,13 +34,24 @@ public class MemberBookService {
         var book = findBook(request.isbn());
 
         // 회원 도서 저장
-        var memberBook = request.toEntity(memberId);
+        var page = book.getBookBasicInfo().getPage();
+        var memberBook = request.toEntity(memberId, page);
         memberBookRepository.save(memberBook);
 
-        // 도서 기록 저장
-        createMemberBookRecord(memberBook, book, request);
+        return MemberBookCreateResponse.from(memberBook);
+    }
 
-        return MemberBookResponse.from(memberBook);
+    @Transactional
+    public void updateMemberBook(
+        Long memberId,
+        MemberBookUpdateServiceRequest request
+    ) {
+        var memberBook = memberBookReader.findOne(request.memberBookId());
+        var book = bookReader.findOne(memberBook.getBookId());
+
+        var page = book.getBookBasicInfo().getPage();
+        var updatedMemberBook = request.toEntity(page);
+        memberBook.updateMemberBook(memberId, updatedMemberBook);
     }
 
     private Book findBook(
@@ -52,17 +63,5 @@ public class MemberBookService {
         }
         var bookDetailResponse = bookReader.findBookDetailAsync(isbn);
         return bookRepository.save(bookDetailResponse.toEntity());
-    }
-
-    private void createMemberBookRecord(
-        MemberBook memberBook,
-        Book book,
-        MemberBookServiceRequest request
-    ) {
-        if (!memberBook.isToRead()) {
-            var page = book.getBookBasicInfo().getPage();
-            var memberBookRecord = request.toEntity(memberBook.getId(), page);
-            memberBookRecordRepository.save(memberBookRecord);
-        }
     }
 }
