@@ -2,14 +2,13 @@ package com.project.dotori.member_book.presentation;
 
 import com.project.dotori.global.response.ApiResponse;
 import com.project.dotori.member_book.application.MemberBookService;
-import com.project.dotori.member_book.application.response.MemberBookResponse;
-import com.project.dotori.member_book.presentation.request.MemberBookRequest;
+import com.project.dotori.member_book.application.response.MemberBookCreateResponse;
+import com.project.dotori.member_book.presentation.request.MemberBookCreateRequest;
+import com.project.dotori.member_book.presentation.request.MemberBookUpdateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -23,16 +22,29 @@ public class MemberBookController {
     private final MemberBookService memberBookService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<MemberBookResponse>> createMemberBook(
-        @RequestBody MemberBookRequest request
+    public ResponseEntity<ApiResponse<MemberBookCreateResponse>> createMemberBook(
+        @RequestBody MemberBookCreateRequest request
     ) {
         var memberId = 1L;
         var serviceRequest = request.toService();
-        var response = memberBookService.createMemberBookRead(memberId, serviceRequest);
+        var response = memberBookService.createMemberBook(memberId, serviceRequest);
 
         var uri = URI.create(CREATE_URL.formatted(response.memberBookId()));
 
         return ResponseEntity.created(uri)
             .body(ApiResponse.created(response));
+    }
+
+    @PatchMapping("/{memberBookId}")
+    public ResponseEntity<ApiResponse<Void>> updateMemberBook(
+        @PathVariable("memberBookId") Long memberBookId,
+        @RequestBody MemberBookUpdateRequest request
+    ) {
+        var memberId = 1L;
+        var serviceRequest = request.toService(memberBookId);
+        memberBookService.updateMemberBook(memberId, serviceRequest);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+            .body(ApiResponse.noContent());
     }
 }
