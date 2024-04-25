@@ -38,6 +38,11 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
     compileOnly 'org.projectlombok:lombok'
@@ -83,4 +88,19 @@ task copyAsciidoc(type: Copy) {
 
 build {
     dependsOn copyAsciidoc
+}
+
+// === QueryDsl 빌드 옵션  ===
+def querydslDir = "$buildDir/generated/querydsl"
+
+sourceSets {
+    main.java.srcDirs += querydslDir
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+}
+
+clean.doLast {
+    file(querydslDir).deleteDir()
 }
