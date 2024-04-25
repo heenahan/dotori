@@ -14,10 +14,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class BookReviewTest {
 
     @DisplayName("star는 null, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0만 가질 수 있다.")
-    @NullSource
     @ValueSource(floats = { 0.0f, 0.5f, 1.0f, 1.5f, 2.0f, 2.5f, 3.0f, 3.5f, 4.0f, 4.5f, 5.0f })
     @ParameterizedTest
-    void validStar(Float star) {
+    void validStar(float star) {
         // when
         var bookReview = BookReview.builder()
             .page(100)

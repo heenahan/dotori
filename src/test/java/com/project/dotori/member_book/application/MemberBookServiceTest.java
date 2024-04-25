@@ -37,7 +37,7 @@ class MemberBookServiceTest {
     @Autowired
     private MemberBookRepository memberBookRepository;
 
-    @DisplayName("상태에 따라 멤버의 독서 기록을 저장한다.")
+    @DisplayName("읽는 중과 읽을 예정인 멤버의 독서 기록을 저장한다.")
     @MethodSource("memberBookServiceRequests")
     @ParameterizedTest
     void createMemberBook(
@@ -67,6 +67,34 @@ class MemberBookServiceTest {
         ).containsExactly(memberId, book.getIsbn(), request.memberBookStatus(), request.startDate(), request.endDate(), request.page(), request.star(), request.bookLevel());
     }
 
+    @DisplayName("읽음 상태일때 멤버의 독서 기록을 저장하면 읽은 페이지 수가 책의 총 페이지 수와 같다.")
+    @Test
+    void createMemberBook() {
+        // given
+        var memberId = 1L;
+        var request = new MemberBookCreateServiceRequest("1234", LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 20), 200, 4.5f, BookLevel.EASY, MemberBookStatus.READ);
+        var book = createBook(request.isbn());
+        bookRepository.save(book);
+
+        // when
+        var response = memberBookService.createMemberBook(memberId, request);
+
+        // then
+        var memberBookOptional = memberBookRepository.findById(response.memberBookId());
+        assertThat(memberBookOptional).isNotEmpty();
+        var memberBook = memberBookOptional.get();
+        assertThat(memberBook).extracting(
+            "memberId",
+            "bookId",
+            "memberBookStatus",
+            "readingDate.startDate",
+            "readingDate.endDate",
+            "bookReview.page",
+            "bookReview.star",
+            "bookReview.bookLevel"
+        ).containsExactly(memberId, book.getIsbn(), request.memberBookStatus(), request.startDate(), request.endDate(), book.getBookBasicInfo().getPage(), request.star(), request.bookLevel());
+    }
+
     @DisplayName("독서 기록을 수정한다.")
     @Test
     void updateMemberBook() {
@@ -83,7 +111,7 @@ class MemberBookServiceTest {
             LocalDate.of(2024, 4, 10),
             null,
             200,
-            null,
+            0.0f,
             null,
             MemberBookStatus.READING
         );
@@ -252,20 +280,17 @@ class MemberBookServiceTest {
     }
 
     private MemberBookCreateServiceRequest createMemberBookServiceRequest() {
-        return new MemberBookCreateServiceRequest("1234", null, null, 0, null, null, MemberBookStatus.TO_READ);
+        return new MemberBookCreateServiceRequest("1234", null, null, 0, 0.0f, null, MemberBookStatus.TO_READ);
 
     }
 
     private static Stream<Arguments> memberBookServiceRequests() {
         return Stream.of(
             Arguments.arguments(
-                new MemberBookCreateServiceRequest("1234", LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 20), 200, 4.5f, BookLevel.EASY, MemberBookStatus.READ)
+                new MemberBookCreateServiceRequest("1234", LocalDate.of(2024, 4, 1), null, 100, 0.0f, null, MemberBookStatus.READING)
             ),
             Arguments.arguments(
-                new MemberBookCreateServiceRequest("1234", LocalDate.of(2024, 4, 1), null, 100, null, null, MemberBookStatus.READING)
-            ),
-            Arguments.arguments(
-                new MemberBookCreateServiceRequest("1234", null, null, 0, null, null, MemberBookStatus.TO_READ)
+                new MemberBookCreateServiceRequest("1234", null, null, 0, 0.0f, null, MemberBookStatus.TO_READ)
             )
         );
     }
