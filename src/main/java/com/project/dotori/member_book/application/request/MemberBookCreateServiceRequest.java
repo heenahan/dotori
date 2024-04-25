@@ -13,7 +13,7 @@ public record MemberBookCreateServiceRequest(
     LocalDate startDate,
     LocalDate endDate,
     int page,
-    Float star,
+    float star,
     BookLevel bookLevel,
     MemberBookStatus memberBookStatus
 ) {
