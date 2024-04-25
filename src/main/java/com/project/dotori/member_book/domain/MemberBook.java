@@ -48,7 +48,7 @@ public class MemberBook {
         LocalDate endDate,
         int page,
         int totalPage,
-        Float star,
+        float star,
         BookLevel bookLevel
     ) {
         this.memberId = memberId;
@@ -59,7 +59,7 @@ public class MemberBook {
             .endDate(endDate)
             .build();
         this.bookReview = BookReview.builder()
-            .page(page)
+            .page(changePage(page, totalPage))
             .totalPage(totalPage)
             .star(star)
             .bookLevel(bookLevel)
@@ -84,7 +84,13 @@ public class MemberBook {
         }
     }
 
-    public boolean isToRead() {
-        return this.memberBookStatus == MemberBookStatus.TO_READ;
+    private int changePage(
+        int page,
+        int totalPage
+    ) {
+        if (this.memberBookStatus == MemberBookStatus.READ) {
+            return totalPage;
+        }
+        return page;
     }
 }
