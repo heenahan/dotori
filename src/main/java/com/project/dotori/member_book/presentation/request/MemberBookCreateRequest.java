@@ -21,7 +21,7 @@ public record MemberBookCreateRequest(
 
     int page,
 
-    Float star,
+    float star,
 
     String bookLevel,
 
