@@ -32,7 +32,7 @@ class BookServiceTest {
     @Test
     void searchBooks() {
         // given
-        var pageRequest = PageRequest.of(1, 20);
+        var pageRequest = PageRequest.of(0, 20);
         var query = "대규모";
 
         var bookSearchResponse1 = createBookSearchResponse();
