@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Objects;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,8 +30,8 @@ public class BookReview {
     @Column(name = "percentage", nullable = false)
     private int percentage = 0;
 
-    @Column(name = "star", nullable = true)
-    private Float star;
+    @Column(name = "star", nullable = false)
+    private float star = 0.0f;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "level",length = 10, nullable = true)
@@ -42,7 +41,7 @@ public class BookReview {
     private BookReview(
         int page,
         int totalPage,
-        Float star,
+        float star,
         BookLevel bookLevel
     ) {
         validNumber(page, totalPage);
@@ -54,12 +53,12 @@ public class BookReview {
     }
 
     private void validStar(
-        Float star
+        float star
     ) {
-        if (Objects.nonNull(star) && (star < 0.0 || star > 5.0)) {
+        if (star < 0.0 || star > 5.0) {
             throw new BusinessException(ErrorCode.INVALID_RANGE, INVALID_STAR_RANGE.formatted(star));
         }
-        if (Objects.nonNull(star) && (star % 1 != 0.0 && star % 1 != 0.5)) {
+        if (star % 1 != 0.0 && star % 1 != 0.5) {
             throw new BusinessException(ErrorCode.INVALID_RANGE, INVALID_STAR_DECIMAL.formatted(star));
         }
     }
