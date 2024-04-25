@@ -15,9 +15,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -105,6 +107,29 @@ class MemberBookServiceTest {
         ).containsExactly(memberId, book.getIsbn(), request.memberBookStatus(), request.startDate(), request.endDate(), request.page(), request.star(), request.bookLevel());
     }
 
+    @DisplayName("독서 기록을 조회한다.")
+    @MethodSource("memberBookStatusAndResult")
+    @ParameterizedTest
+    void findAll(
+        String status,
+        int size
+    ) {
+        // given
+        var memberId = 1L;
+        var pageRequest = PageRequest.of(0, 20);
+        var books = createBooks();
+        var memberBooks = createMemberBooks(memberId);
+
+        bookRepository.saveAll(books);
+        memberBookRepository.saveAll(memberBooks);
+
+        // when
+        var responses = memberBookService.findAll(memberId, status, pageRequest);
+
+        // then
+        assertThat(responses.getContent()).hasSize(size);
+    }
+
     private Book createBook(
         String isbn
     ) {
@@ -152,6 +177,80 @@ class MemberBookServiceTest {
             .build();
     }
 
+    private List<MemberBook> createMemberBooks(
+        Long memberId
+    ) {
+        var memberBook1 = MemberBook.builder()
+            .bookId("1234")
+            .memberId(memberId)
+            .memberBookStatus(MemberBookStatus.TO_READ)
+            .page(0)
+            .totalPage(300)
+            .star(0.0f)
+            .build();
+
+        var memberBook2 = MemberBook.builder()
+            .bookId("2345")
+            .memberId(memberId)
+            .memberBookStatus(MemberBookStatus.READING)
+            .startDate(LocalDate.of(2024, 4, 5))
+            .page(40)
+            .totalPage(300)
+            .star(0.0f)
+            .build();
+
+        var memberBook3 = MemberBook.builder()
+            .bookId("4567")
+            .memberId(memberId)
+            .memberBookStatus(MemberBookStatus.READ)
+            .startDate(LocalDate.of(2024, 4, 14))
+            .endDate(LocalDate.of(2024, 4, 20))
+            .page(300)
+            .totalPage(300)
+            .star(4.0f)
+            .bookLevel(BookLevel.DIFFICULT)
+            .build();
+
+        return List.of(memberBook1, memberBook2, memberBook3);
+    }
+
+    private List<Book> createBooks() {
+        var book1 = Book.builder()
+            .isbn("1234")
+            .title("title")
+            .author("author")
+            .coverPath("https://")
+            .publisher("publisher")
+            .publishDate(LocalDate.of(2023, 1, 1))
+            .categoryId(1L)
+            .page(300)
+            .build();
+
+        var book2 = Book.builder()
+            .isbn("2345")
+            .title("title")
+            .author("author")
+            .coverPath("https://")
+            .publisher("publisher")
+            .publishDate(LocalDate.of(2023, 1, 1))
+            .categoryId(1L)
+            .page(300)
+            .build();
+
+        var book3 = Book.builder()
+            .isbn("4567")
+            .title("title")
+            .author("author")
+            .coverPath("https://")
+            .publisher("publisher")
+            .publishDate(LocalDate.of(2023, 1, 1))
+            .categoryId(1L)
+            .page(300)
+            .build();
+
+        return List.of(book1, book2, book3);
+    }
+
     private MemberBookCreateServiceRequest createMemberBookServiceRequest() {
         return new MemberBookCreateServiceRequest("1234", null, null, 0, null, null, MemberBookStatus.TO_READ);
 
@@ -168,6 +267,15 @@ class MemberBookServiceTest {
             Arguments.arguments(
                 new MemberBookCreateServiceRequest("1234", null, null, 0, null, null, MemberBookStatus.TO_READ)
             )
+        );
+    }
+
+    private static Stream<Arguments> memberBookStatusAndResult() {
+        return Stream.of(
+            Arguments.arguments(null, 3),
+            Arguments.arguments("TO_READ", 1),
+            Arguments.arguments("READING", 1),
+            Arguments.arguments("READ", 1)
         );
     }
 }

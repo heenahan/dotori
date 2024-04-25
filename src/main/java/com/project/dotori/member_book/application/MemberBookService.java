@@ -6,10 +6,16 @@ import com.project.dotori.book.domain.repository.BookRepository;
 import com.project.dotori.member_book.application.request.MemberBookCreateServiceRequest;
 import com.project.dotori.member_book.application.request.MemberBookUpdateServiceRequest;
 import com.project.dotori.member_book.application.response.MemberBookCreateResponse;
+import com.project.dotori.member_book.application.response.MemberBookResponse;
+import com.project.dotori.member_book.domain.MemberBookStatus;
 import com.project.dotori.member_book.domain.repository.MemberBookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -52,6 +58,20 @@ public class MemberBookService {
         var page = book.getBookBasicInfo().getPage();
         var updatedMemberBook = request.toEntity(page);
         memberBook.updateMemberBook(memberId, updatedMemberBook);
+    }
+
+    public Slice<MemberBookResponse> findAll(
+        Long memberId,
+        String status,
+        Pageable pageable
+    ) {
+        var memberBookStatus = Optional.ofNullable(status)
+                .map(MemberBookStatus::from)
+                .orElseGet(() -> null);
+
+        var responses = memberBookReader.findAllByStatus(memberId, memberBookStatus, pageable);
+
+        return responses.map(MemberBookResponse::from);
     }
 
     private Book findBook(
