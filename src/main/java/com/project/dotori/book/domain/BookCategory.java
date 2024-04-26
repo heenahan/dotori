@@ -2,6 +2,7 @@ package com.project.dotori.book.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,4 +18,11 @@ public class BookCategory {
 
     @Column(name = "name", length = 50, nullable = false)
     private String name;
+
+    @Builder
+    private BookCategory(
+        String name
+    ) {
+        this.name = name;
+    }
 }
