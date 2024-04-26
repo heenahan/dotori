@@ -51,3 +51,16 @@ include::{snippets}/find-member-book/path-parameters.adoc[]
 
 include::{snippets}/find-member-book/http-response.adoc[]
 include::{snippets}/find-member-book/response-fields.adoc[]
+
+[[delete-member-book]]
+=== 독서 기록을 삭제한다.
+
+==== HTTP Request
+
+include::{snippets}/find-member-book/http-request.adoc[]
+include::{snippets}/find-member-book/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/find-member-book/http-response.adoc[]
+include::{snippets}/find-member-book/response-fields.adoc[]

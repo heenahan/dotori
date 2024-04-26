@@ -54,6 +54,17 @@ public class MemberBookController {
             .body(ApiResponse.noContent());
     }
 
+    @DeleteMapping("/{memberBookId}")
+    public ResponseEntity<ApiResponse<Void>> deleteMemberBook(
+        @PathVariable("memberBookId") Long memberBookId
+    ) {
+        var memberId = 1L;
+        memberBookService.deleteMemberBook(memberId, memberBookId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+            .body(ApiResponse.noContent());
+    }
+
     @GetMapping
     public ResponseEntity<ApiResponse<Slice<MemberBookResponse>>> findAll(
         @RequestParam("status") String status,
@@ -69,7 +80,7 @@ public class MemberBookController {
     public ResponseEntity<ApiResponse<MemberBookDetailResponse>> findOne(
         @PathVariable("memberBookId") Long memberBookId
     ) {
-        var response = memberBookService.findOne(memberBookId);
+        var response = memberBookService.findMemberBook(memberBookId);
 
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
