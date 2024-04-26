@@ -61,6 +61,17 @@ public class MemberBookService {
         memberBook.updateMemberBook(memberId, updatedMemberBook);
     }
 
+    @Transactional
+    public void deleteMemberBook(
+        Long memberId,
+        Long memberBookId
+    ) {
+        var memberBook = memberBookReader.findOne(memberBookId);
+        memberBook.validOwner(memberId);
+
+        memberBookRepository.delete(memberBook);
+    }
+
     public Slice<MemberBookResponse> findAll(
         Long memberId,
         String status,
@@ -75,7 +86,7 @@ public class MemberBookService {
         return responses.map(MemberBookResponse::from);
     }
 
-    public MemberBookDetailResponse findOne(
+    public MemberBookDetailResponse findMemberBook(
         Long memberBookId
     ) {
         var response = memberBookReader.findDetailOne(memberBookId);
