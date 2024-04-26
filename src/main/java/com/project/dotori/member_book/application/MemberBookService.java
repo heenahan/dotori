@@ -6,6 +6,7 @@ import com.project.dotori.book.domain.repository.BookRepository;
 import com.project.dotori.member_book.application.request.MemberBookCreateServiceRequest;
 import com.project.dotori.member_book.application.request.MemberBookUpdateServiceRequest;
 import com.project.dotori.member_book.application.response.MemberBookCreateResponse;
+import com.project.dotori.member_book.application.response.MemberBookDetailResponse;
 import com.project.dotori.member_book.application.response.MemberBookResponse;
 import com.project.dotori.member_book.domain.MemberBookStatus;
 import com.project.dotori.member_book.domain.repository.MemberBookRepository;
@@ -72,6 +73,14 @@ public class MemberBookService {
         var responses = memberBookReader.findAllByStatus(memberId, memberBookStatus, pageable);
 
         return responses.map(MemberBookResponse::from);
+    }
+
+    public MemberBookDetailResponse findOne(
+        Long memberBookId
+    ) {
+        var response = memberBookReader.findDetailOne(memberBookId);
+
+        return MemberBookDetailResponse.from(response);
     }
 
     private Book findBook(

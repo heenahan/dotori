@@ -1,7 +1,10 @@
 package com.project.dotori.member_book.application;
 
 import com.project.dotori.book.domain.Book;
+import com.project.dotori.book.domain.BookCategory;
+import com.project.dotori.book.domain.repository.BookCategoryRepository;
 import com.project.dotori.book.domain.repository.BookRepository;
+import com.project.dotori.global.exception.BusinessException;
 import com.project.dotori.member_book.application.request.MemberBookCreateServiceRequest;
 import com.project.dotori.member_book.application.request.MemberBookUpdateServiceRequest;
 import com.project.dotori.member_book.domain.BookLevel;
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 @SpringBootTest
@@ -36,6 +40,9 @@ class MemberBookServiceTest {
 
     @Autowired
     private MemberBookRepository memberBookRepository;
+
+    @Autowired
+    private BookCategoryRepository bookCategoryRepository;
 
     @DisplayName("읽는 중과 읽을 예정인 멤버의 독서 기록을 저장한다.")
     @MethodSource("memberBookServiceRequests")
@@ -158,6 +165,72 @@ class MemberBookServiceTest {
         assertThat(responses.getContent()).hasSize(size);
     }
 
+    @DisplayName("자세한 독서 기록을 조회한다.")
+    @Test
+    void findDetailMemberBook() {
+        // given
+        var bookCategory = createBookCategory();
+        bookCategoryRepository.save(bookCategory);
+        var isbn = "1234";
+        var book = createBook(isbn, bookCategory.getId());
+        bookRepository.save(book);
+        var memberBook = createMemberBook(book);
+        memberBookRepository.save(memberBook);
+
+        // when
+        var response = memberBookService.findOne(memberBook.getId());
+
+        // then
+        assertThat(response).extracting(
+            "isbn",
+            "coverPath",
+            "title",
+            "author",
+            "publisher",
+            "totalPage",
+            "categoryName",
+            "memberBookStatus",
+            "startDate",
+            "endDate",
+            "star",
+            "page",
+            "percent",
+            "bookLevel"
+        ).containsExactly(
+            isbn,
+            book.getBookDetailInfo().getCoverPath(),
+            book.getBookBasicInfo().getTitle(),
+            book.getBookBasicInfo().getAuthor(),
+            book.getPublishInfo().getPublisher(),
+            book.getBookBasicInfo().getPage(),
+            bookCategory.getName(),
+            memberBook.getMemberBookStatus().name(),
+            memberBook.getReadingDate().getStartDate(),
+            memberBook.getReadingDate().getEndDate(),
+            memberBook.getBookReview().getStar(),
+            memberBook.getBookReview().getPage(),
+            memberBook.getBookReview().getPercentage(),
+            memberBook.getBookReview().getBookLevel().getDescription()
+        );
+    }
+
+    @DisplayName("자세한 독서 기록을 조회할 때 존재하지 않는 아이디라면 예외가 발생한다.")
+    @Test
+    void findDetailMemberBookException() {
+        // given
+        var invalidMemberBookId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> memberBookService.findOne(invalidMemberBookId))
+            .isInstanceOf(BusinessException.class);
+    }
+
+    private BookCategory createBookCategory() {
+        return BookCategory.builder()
+            .name("name")
+            .build();
+    }
+
     private Book createBook(
         String isbn
     ) {
@@ -191,6 +264,23 @@ class MemberBookServiceTest {
             .build();
     }
 
+    private Book createBook(
+        String isbn,
+        Long categoryId
+    ) {
+        return Book.builder()
+            .isbn(isbn)
+            .title("title")
+            .author("author")
+            .coverPath("https://")
+            .publishDate(LocalDate.of(2023, 1, 1))
+            .categoryId(categoryId)
+            .page(300)
+            .description("description")
+            .publisher("publisher")
+            .build();
+    }
+
     private MemberBook createMemberBook(
         Book book,
         Long memberId
@@ -202,6 +292,20 @@ class MemberBookServiceTest {
             .startDate(LocalDate.of(2024, 4, 1))
             .endDate(LocalDate.of(2024, 4, 20))
             .totalPage(book.getBookBasicInfo().getPage())
+            .build();
+    }
+
+    private MemberBook createMemberBook(
+        Book book
+    ) {
+        return MemberBook.builder()
+            .bookId(book.getIsbn())
+            .memberId(1L)
+            .memberBookStatus(MemberBookStatus.READ)
+            .startDate(LocalDate.of(2024, 4, 1))
+            .endDate(LocalDate.of(2024, 4, 20))
+            .totalPage(book.getBookBasicInfo().getPage())
+            .bookLevel(BookLevel.MEDIUM)
             .build();
     }
 
