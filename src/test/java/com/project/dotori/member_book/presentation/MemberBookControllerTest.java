@@ -204,7 +204,7 @@ class MemberBookControllerTest extends RestDocsSupport {
         // given
         var memberBookId = 1L;
         var response = createMemberBookDetailResponse();
-        given(memberBookService.findOne(anyLong())).willReturn(response);
+        given(memberBookService.findMemberBook(anyLong())).willReturn(response);
 
         // when & then
         mockMvc.perform(get("/api/v1/member-books/{memberBookId}", memberBookId)
@@ -233,6 +233,30 @@ class MemberBookControllerTest extends RestDocsSupport {
                     fieldWithPath("data.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
                     fieldWithPath("data.percent").type(JsonFieldType.NUMBER).description("읽은 비율(%)"),
                     fieldWithPath("data.bookLevel").type(JsonFieldType.STRING).description("책 수준").optional()
+                )
+            ));
+    }
+
+    @DisplayName("독서 기록을 삭제한다.")
+    @Test
+    void deleteMemberBook() throws Exception {
+        // given
+        var memberBookId = 1L;
+        doNothing().when(memberBookService).deleteMemberBook(anyLong(), anyLong());
+
+        // when & then
+        mockMvc.perform(delete("/api/v1/member-books/{memberBookId}", memberBookId)
+                .contentType(MediaType.APPLICATION_JSON)
+            ).andDo(print())
+            .andExpect(status().isNoContent())
+            .andDo(document("delete-member-book",
+                pathParameters(
+                    parameterWithName("memberBookId").description("독서 기록 아이디")
+                ),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                    fieldWithPath("serverTime").type(JsonFieldType.STRING).description("현재 서버 시간"),
+                    fieldWithPath("data").type(JsonFieldType.NULL).description("응답 데이터")
                 )
             ));
     }
