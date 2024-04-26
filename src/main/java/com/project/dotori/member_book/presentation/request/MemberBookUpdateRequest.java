@@ -18,7 +18,7 @@ public record MemberBookUpdateRequest(
 
     int page,
 
-    Float star,
+    float star,
 
     String bookLevel,
 
