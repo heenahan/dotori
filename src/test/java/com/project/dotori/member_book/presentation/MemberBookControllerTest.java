@@ -6,6 +6,7 @@ import com.project.dotori.member_book.application.MemberBookService;
 import com.project.dotori.member_book.application.request.MemberBookCreateServiceRequest;
 import com.project.dotori.member_book.application.request.MemberBookUpdateServiceRequest;
 import com.project.dotori.member_book.application.response.MemberBookCreateResponse;
+import com.project.dotori.member_book.application.response.MemberBookDetailResponse;
 import com.project.dotori.member_book.application.response.MemberBookResponse;
 import com.project.dotori.member_book.domain.MemberBookStatus;
 import com.project.dotori.member_book.presentation.request.MemberBookCreateRequest;
@@ -197,6 +198,45 @@ class MemberBookControllerTest extends RestDocsSupport {
             ));
     }
 
+    @DisplayName("자세한 독서 기록을 조회한다.")
+    @Test
+    void findDetailOne() throws Exception {
+        // given
+        var memberBookId = 1L;
+        var response = createMemberBookDetailResponse();
+        given(memberBookService.findOne(anyLong())).willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/api/v1/member-books/{memberBookId}", memberBookId)
+                .contentType(MediaType.APPLICATION_JSON)
+            ).andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("find-member-book",
+                pathParameters(
+                    parameterWithName("memberBookId").description("독서 기록 아이디")
+                ),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                    fieldWithPath("serverTime").type(JsonFieldType.STRING).description("현재 서버 시간"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                    fieldWithPath("data.isbn").type(JsonFieldType.STRING).description("ISBN 번호"),
+                    fieldWithPath("data.coverPath").type(JsonFieldType.STRING).description("책 표지 이미지 경로"),
+                    fieldWithPath("data.title").type(JsonFieldType.STRING).description("책 제목"),
+                    fieldWithPath("data.author").type(JsonFieldType.STRING).description("저자"),
+                    fieldWithPath("data.publisher").type(JsonFieldType.STRING).description("출판사"),
+                    fieldWithPath("data.totalPage").type(JsonFieldType.NUMBER).description("전체 페이지 수"),
+                    fieldWithPath("data.categoryName").type(JsonFieldType.STRING).description("책 카테고리"),
+                    fieldWithPath("data.memberBookStatus").type(JsonFieldType.STRING).description("독서 기록 상태"),
+                    fieldWithPath("data.startDate").type(JsonFieldType.STRING).description("독서 시작 날짜").optional(),
+                    fieldWithPath("data.endDate").type(JsonFieldType.STRING).description("독서 완료 날짜").optional(),
+                    fieldWithPath("data.star").type(JsonFieldType.NUMBER).description("책의 평점"),
+                    fieldWithPath("data.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                    fieldWithPath("data.percent").type(JsonFieldType.NUMBER).description("읽은 비율(%)"),
+                    fieldWithPath("data.bookLevel").type(JsonFieldType.STRING).description("책 수준").optional()
+                )
+            ));
+    }
+
     private MemberBookCreateRequest createMemberBookCreateRequest() {
         return MemberBookCreateRequest.builder()
             .isbn("1234")
@@ -216,6 +256,25 @@ class MemberBookControllerTest extends RestDocsSupport {
             .page(200)
             .star(4.0f)
             .memberBookStatus("READ")
+            .bookLevel("EASY")
+            .build();
+    }
+
+    private MemberBookDetailResponse createMemberBookDetailResponse() {
+        return MemberBookDetailResponse.builder()
+            .isbn("1234")
+            .title("즐거운 영어")
+            .author("김작가")
+            .categoryName("국내 도서>교육>영어")
+            .publisher("조은교육")
+            .totalPage(300)
+            .coverPath("https://")
+            .memberBookStatus("READ")
+            .startDate(LocalDate.of(2024, 4, 14))
+            .endDate(LocalDate.of(2024, 4, 20))
+            .page(300)
+            .percent(100)
+            .star(4.0f)
             .bookLevel("EASY")
             .build();
     }

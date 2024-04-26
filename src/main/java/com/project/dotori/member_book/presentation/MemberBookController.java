@@ -3,6 +3,7 @@ package com.project.dotori.member_book.presentation;
 import com.project.dotori.global.response.ApiResponse;
 import com.project.dotori.member_book.application.MemberBookService;
 import com.project.dotori.member_book.application.response.MemberBookCreateResponse;
+import com.project.dotori.member_book.application.response.MemberBookDetailResponse;
 import com.project.dotori.member_book.application.response.MemberBookResponse;
 import com.project.dotori.member_book.presentation.request.MemberBookCreateRequest;
 import com.project.dotori.member_book.presentation.request.MemberBookUpdateRequest;
@@ -62,5 +63,14 @@ public class MemberBookController {
         var responses = memberBookService.findAll(memberId, status, pageable);
 
         return ResponseEntity.ok(ApiResponse.ok(responses));
+    }
+
+    @GetMapping("/{memberBookId}")
+    public ResponseEntity<ApiResponse<MemberBookDetailResponse>> findOne(
+        @PathVariable("memberBookId") Long memberBookId
+    ) {
+        var response = memberBookService.findOne(memberBookId);
+
+        return ResponseEntity.ok(ApiResponse.ok(response));
     }
 }
