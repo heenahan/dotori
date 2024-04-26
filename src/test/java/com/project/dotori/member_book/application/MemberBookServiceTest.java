@@ -178,7 +178,7 @@ class MemberBookServiceTest {
         memberBookRepository.save(memberBook);
 
         // when
-        var response = memberBookService.findOne(memberBook.getId());
+        var response = memberBookService.findMemberBook(memberBook.getId());
 
         // then
         assertThat(response).extracting(
@@ -221,7 +221,35 @@ class MemberBookServiceTest {
         var invalidMemberBookId = 1L;
 
         // when & then
-        assertThatThrownBy(() -> memberBookService.findOne(invalidMemberBookId))
+        assertThatThrownBy(() -> memberBookService.findMemberBook(invalidMemberBookId))
+            .isInstanceOf(BusinessException.class);
+    }
+
+    @DisplayName("독서 기록을 삭제한다.")
+    @Test
+    void deleteMemberBook() {
+        // given
+        var memberId = 1L;
+        var memberBook = createMemberBook(memberId);
+        memberBookRepository.save(memberBook);
+
+        // when
+        memberBookService.deleteMemberBook(memberId, memberBook.getId());
+
+        // then
+        var memberBookOptional = memberBookRepository.findById(memberBook.getId());
+        assertThat(memberBookOptional).isEmpty();
+    }
+
+    @DisplayName("독서 기록을 삭제할 때 존재하는 않는 아이디라면 예외가 발생한다.")
+    @Test
+    void deleteMemberBookException() {
+        // given
+        var memberId = 1L;
+        var memberBookId = 1L;
+
+        // when & then
+        assertThatThrownBy(() ->  memberBookService.deleteMemberBook(memberId, memberBookId))
             .isInstanceOf(BusinessException.class);
     }
 
@@ -292,6 +320,19 @@ class MemberBookServiceTest {
             .startDate(LocalDate.of(2024, 4, 1))
             .endDate(LocalDate.of(2024, 4, 20))
             .totalPage(book.getBookBasicInfo().getPage())
+            .build();
+    }
+
+    private MemberBook createMemberBook(
+        Long memberId
+    ) {
+        return MemberBook.builder()
+            .bookId("1234")
+            .memberId(memberId)
+            .memberBookStatus(MemberBookStatus.READ)
+            .startDate(LocalDate.of(2024, 4, 1))
+            .endDate(LocalDate.of(2024, 4, 20))
+            .totalPage(300)
             .build();
     }
 
