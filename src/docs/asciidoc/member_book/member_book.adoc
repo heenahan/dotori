@@ -4,7 +4,7 @@
 ==== HTTP Request
 
 include::{snippets}/create-member-book/http-request.adoc[]
-include::{snippets}/create-member-book/request-body.adoc[]
+include::{snippets}/create-member-book/request-fields.adoc[]
 
 ==== HTTP Response
 
@@ -25,3 +25,29 @@ include::{snippets}/update-member-book/request-fields.adoc[]
 
 include::{snippets}/update-member-book/http-response.adoc[]
 include::{snippets}/update-member-book/response-fields.adoc[]
+
+[[find-member-books]]
+=== 상태별 독서 기록을 조회한다.
+
+==== HTTP Request
+
+include::{snippets}/find-member-books/http-request.adoc[]
+include::{snippets}/find-member-books/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/find-member-books/http-response.adoc[]
+include::{snippets}/find-member-books/response-fields.adoc[]
+
+[[find-member-book]]
+=== 독서 기록을 자세히 조회한다.
+
+==== HTTP Request
+
+include::{snippets}/find-member-book/http-request.adoc[]
+include::{snippets}/find-member-book/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/find-member-book/http-response.adoc[]
+include::{snippets}/find-member-book/response-fields.adoc[]
