@@ -34,7 +34,7 @@ public class BookReview {
     private float star = 0.0f;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "level",length = 10, nullable = true)
+    @Column(name = "level",length = 20, nullable = true)
     private BookLevel bookLevel;
 
     @Builder
