@@ -34,10 +34,10 @@ public interface MemberBookRepository extends JpaRepository<MemberBook, Long> {
         select 
             new com.project.dotori.member_book.domain.repository.response.StatisticsYearQueryResponse(
                 count(mb.bookId), 
-                nullif(sum(mb.bookReview.page), 0)
+                coalesce(sum(mb.bookReview.page), 0)
             )
         from MemberBook mb
-        where mb.memberId = :memberId and year (mb.readingDate.endDate) = :year and  mb.memberBookStatus = 'READ'
+        where mb.memberId = :memberId and year (mb.readingDate.endDate) = :year
     """)
     StatisticsYearQueryResponse calculateTotalBookAndPage(
         @Param("memberId") Long memberId,
@@ -47,10 +47,10 @@ public interface MemberBookRepository extends JpaRepository<MemberBook, Long> {
     @Query("""
         select 
             new com.project.dotori.member_book.domain.repository.response.StatisticsStarAverageQueryResponse(
-                nullif(round(sum(mb.bookReview.star) / count(mb.bookReview.star), 1), 0) 
+                coalesce(round(sum(mb.bookReview.star) / count(mb.bookReview.star), 1), 0.0) 
             )
         from MemberBook mb
-        where mb.memberId = :memberId and year (mb.readingDate.endDate) = :year and mb.memberBookStatus = 'READ'
+        where mb.memberId = :memberId and year (mb.readingDate.endDate) = :year
     """)
     StatisticsStarAverageQueryResponse calculateStarAverage(
         @Param("memberId") Long memberId,
@@ -79,7 +79,6 @@ public interface MemberBookRepository extends JpaRepository<MemberBook, Long> {
         left join member_books mb on mb.star = s.star 
             and year(mb.end_date) = :year
             and mb.member_id = :memberId 
-            and mb.status = 'READ'
         group by s.star
     """, nativeQuery = true)
     List<StatisticsStarQueryResponse> calculateStarRatio(
@@ -106,7 +105,7 @@ public interface MemberBookRepository extends JpaRepository<MemberBook, Long> {
         		month(mb.end_date) as months,
                 count(mb.book_id) as cnt
         	from member_books mb
-        	where mb.member_id = :memberId and year(mb.end_date) = :year and mb.status = 'READ'
+        	where mb.member_id = :memberId and year(mb.end_date) = :year
             group by month(mb.end_date)
         )
         
@@ -118,6 +117,33 @@ public interface MemberBookRepository extends JpaRepository<MemberBook, Long> {
         left join monthly_count_books mcb on m.months = mcb.months
     """, nativeQuery = true)
     List<StatisticsMonthQueryResponse> calculateMonthlyCount(
+        @Param("memberId") Long memberId,
+        @Param("year") Integer year
+    );
+
+    @Query(value = """
+        with category_top_five as (
+        	select
+        		b.category_id as category_id,
+                count(mb.book_id) as cnt
+        	from member_books mb
+        	join books b on b.isbn = mb.book_id
+            join book_categories bc on bc.id = b.category_id
+            where mb.member_id = :memberId and year(mb.end_date) = :year
+        	group by b.category_id
+        	order by count(mb.book_id) desc
+            limit 5
+        )
+        
+        select
+        	bc.id as categoryId,
+            bc.name as categoryName,
+            ctf.cnt as cnt,
+        	round(ctf.cnt / sum(ctf.cnt) over() * 100, 0) as percentage
+        from category_top_five ctf
+        join book_categories bc on ctf.category_id = bc.id;
+    """, nativeQuery = true)
+    List<StatisticsCategoryQueryResponse> calculateTopCategory(
         @Param("memberId") Long memberId,
         @Param("year") Integer year
     );
