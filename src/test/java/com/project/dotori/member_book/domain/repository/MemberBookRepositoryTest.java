@@ -8,7 +8,6 @@ import com.project.dotori.member_book.domain.BookLevel;
 import com.project.dotori.member_book.domain.BookReview;
 import com.project.dotori.member_book.domain.MemberBook;
 import com.project.dotori.member_book.domain.MemberBookStatus;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Slf4j
 @Transactional
 @ActiveProfiles("test")
 @SpringBootTest
@@ -97,7 +95,7 @@ class MemberBookRepositoryTest {
             .findFirst();
         assertThat(januaryOptional).isNotEmpty();
         var january = januaryOptional.get();
-        assertThat(january.getCnt()).isEqualTo(0);
+        assertThat(january.getCnt()).isZero();
 
         var marchOptional = responses.stream()
             .filter(res -> Objects.equals(res.getMonths(), 4))

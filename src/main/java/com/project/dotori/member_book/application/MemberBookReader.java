@@ -6,12 +6,13 @@ import com.project.dotori.member_book.domain.MemberBook;
 import com.project.dotori.member_book.domain.MemberBookStatus;
 import com.project.dotori.member_book.domain.repository.MemberBookQueryRepository;
 import com.project.dotori.member_book.domain.repository.MemberBookRepository;
-import com.project.dotori.member_book.domain.repository.response.MemberBookDetailQueryResponse;
-import com.project.dotori.member_book.domain.repository.response.MemberBookQueryResponse;
+import com.project.dotori.member_book.domain.repository.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -45,5 +46,40 @@ public class MemberBookReader {
             memberBookStatus,
             pageable
         );
+    }
+
+    public StatisticsYearQueryResponse findStatisticsYearResponse(
+        Long memberId,
+        Integer year
+    ) {
+        return memberBookRepository.calculateTotalBookAndPage(memberId, year);
+    }
+
+    public List<StatisticsMonthQueryResponse> findStatisticsMonthResponses(
+        Long memberId,
+        Integer year
+    ) {
+        return memberBookRepository.calculateMonthlyCount(memberId, year);
+    }
+
+    public StatisticsStarAverageQueryResponse findStatisticsStarAverageResponse(
+        Long memberId,
+        Integer year
+    ) {
+        return memberBookRepository.calculateStarAverage(memberId, year);
+    }
+
+    public List<StatisticsStarQueryResponse> findStatisticsStarRatioResponses(
+        Long memberId,
+        Integer year
+    ) {
+        return memberBookRepository.calculateStarRatio(memberId, year);
+    }
+
+    public List<StatisticsCategoryQueryResponse> findStatisticsCategoryResponses(
+        Long memberId,
+        Integer year
+    ) {
+        return memberBookRepository.calculateTopCategory(memberId, year);
     }
 }
