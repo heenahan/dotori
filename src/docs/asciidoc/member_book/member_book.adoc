@@ -10,7 +10,7 @@ include::{snippets}/create-member-book/request-fields.adoc[]
 
 include::{snippets}/create-member-book/http-response.adoc[]
 include::{snippets}/create-member-book/response-headers.adoc[]
-include::{snippets}/create-member-book/response-body.adoc[]
+include::{snippets}/create-member-book/response-fields.adoc[]
 
 [[update-member-book]]
 === 독서 기록을 수정한다.
