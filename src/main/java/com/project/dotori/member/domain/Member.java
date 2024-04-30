@@ -21,8 +21,10 @@ public class Member {
 
     @Builder
     private Member(
-        Nickname nickname
+        String nickname
     ) {
-        this.nickname = nickname;
+        this.nickname = Nickname.builder()
+            .nickname(nickname)
+            .build();
     }
 }
