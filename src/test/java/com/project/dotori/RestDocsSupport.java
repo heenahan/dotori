@@ -2,8 +2,15 @@ package com.project.dotori;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.project.dotori.auth.AuthorizationIntercepter;
+import com.project.dotori.auth.JwtGenerator;
+import com.project.dotori.auth.MemberIdArgumentResolver;
+import com.project.dotori.global.exception.GlobalExceptionHandler;
+import com.project.dotori.member.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -17,7 +24,16 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 
 @ActiveProfiles("test")
 @ExtendWith(RestDocumentationExtension.class)
+@Import(JwtTestConfiguration.class)
 public abstract class RestDocsSupport {
+
+    private static final String TOKEN = "Bearer %s";
+
+    @Autowired
+    private JwtGenerator jwtGenerator;
+
+    @Autowired
+    private MemberIdArgumentResolver memberIdArgumentResolver;
 
     protected MockMvc mockMvc;
     protected ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
@@ -28,11 +44,19 @@ public abstract class RestDocsSupport {
     void setup(RestDocumentationContextProvider provider) {
         this.mockMvc = MockMvcBuilders.standaloneSetup(setController())
             .addFilter(new CharacterEncodingFilter("UTF-8", true))
+            .setControllerAdvice(GlobalExceptionHandler.class)
+            .addMappedInterceptors(new String[]{ "/api/v1/**" }, new AuthorizationIntercepter(jwtGenerator))
             .apply(MockMvcRestDocumentation.documentationConfiguration(provider)
                 .operationPreprocessors()
                 .withRequestDefaults(prettyPrint())
                 .withResponseDefaults(prettyPrint()))
-            .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+            .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver(), new MemberIdArgumentResolver())
             .build();
+    }
+
+    protected String getToken(
+        Long memberId
+    ) {
+        return TOKEN.formatted(jwtGenerator.generateAccessToken(memberId, Role.MEMBER));
     }
 }

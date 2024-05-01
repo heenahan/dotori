@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
@@ -20,6 +21,8 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -62,10 +65,14 @@ class BookControllerTest extends RestDocsSupport {
 
         // when & then
         mockMvc.perform(get("/api/v1/books/{isbn}", isbn)
+            .header(HttpHeaders.AUTHORIZATION, getToken(1L))
             .contentType(MediaType.APPLICATION_JSON)
         ).andDo(print())
         .andExpect(status().isOk())
         .andDo(document("find-book-detail",
+            requestHeaders(
+                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")
+            ),
             pathParameters(
                 parameterWithName("isbn").description("책의 Isbn13")
             ),
@@ -111,11 +118,15 @@ class BookControllerTest extends RestDocsSupport {
 
         // when & then
         mockMvc.perform(get("/api/v1/books/search")
+            .header(HttpHeaders.AUTHORIZATION, getToken(1L))
             .param("query", query)
             .contentType(MediaType.APPLICATION_JSON)
         ).andDo(print())
         .andExpect(status().isOk())
         .andDo(document("search-books",
+            requestHeaders(
+                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")
+            ),
             queryParameters(
                 parameterWithName("query").description("검색어")
             ),

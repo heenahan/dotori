@@ -1,5 +1,6 @@
-package com.project.dotori.member.presentation;
+package com.project.dotori.statistics.presentation;
 
+import com.project.dotori.auth.MemberId;
 import com.project.dotori.global.response.ApiResponse;
 import com.project.dotori.statistics.application.StatisticsService;
 import com.project.dotori.statistics.application.response.StatisticsYearResponse;
@@ -11,17 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/me")
+@RequestMapping("/api/v1/statistics")
 @RestController
-public class MemberController {
+public class StatisticsController {
 
     private final StatisticsService statisticsService;
 
-    @GetMapping("/statistics/year")
+    @GetMapping("/year")
     public ResponseEntity<ApiResponse<StatisticsYearResponse>> findStatisticsYear(
+        @MemberId Long memberId,
         @Param("year") Integer year
     ) {
-        var memberId = 1L;
         var response = statisticsService.findStatisticsYear(memberId, year);
 
         return ResponseEntity.ok(ApiResponse.ok(response));

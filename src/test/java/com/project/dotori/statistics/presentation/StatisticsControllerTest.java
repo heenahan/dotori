@@ -1,4 +1,4 @@
-package com.project.dotori.member.presentation;
+package com.project.dotori.statistics.presentation;
 
 import com.project.dotori.RestDocsSupport;
 import com.project.dotori.statistics.application.StatisticsService;
@@ -10,36 +10,38 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.random.RandomGenerator;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MemberController.class)
-class MemberControllerTest extends RestDocsSupport {
+@WebMvcTest(StatisticsController.class)
+class StatisticsControllerTest extends RestDocsSupport {
 
     @MockBean
     private StatisticsService statisticsService;
 
     @Override
     protected Object setController() {
-        return new MemberController(statisticsService);
+        return new StatisticsController(statisticsService);
     }
 
     @DisplayName("멤버의 연간 통계를 조회한다.")
@@ -50,12 +52,16 @@ class MemberControllerTest extends RestDocsSupport {
         var response = createStatisticsYearResponse();
         given(statisticsService.findStatisticsYear(anyLong(), anyInt())).willReturn(response);
 
-        mockMvc.perform(get("/api/v1/me/statistics/year")
+        mockMvc.perform(get("/api/v1/statistics/year")
+                .header(HttpHeaders.AUTHORIZATION, getToken(1L))
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("year", String.valueOf(year))
             ).andDo(print())
             .andExpect(status().isOk())
             .andDo(document("find-statistics-year",
+                requestHeaders(
+                    headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")
+                ),
                 queryParameters(
                     parameterWithName("year").description("넌도")
                 ),

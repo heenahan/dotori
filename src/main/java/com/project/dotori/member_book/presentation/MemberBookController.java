@@ -1,5 +1,6 @@
 package com.project.dotori.member_book.presentation;
 
+import com.project.dotori.auth.MemberId;
 import com.project.dotori.global.response.ApiResponse;
 import com.project.dotori.member_book.application.MemberBookService;
 import com.project.dotori.member_book.application.response.MemberBookCreateResponse;
@@ -29,9 +30,9 @@ public class MemberBookController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<MemberBookCreateResponse>> createMemberBook(
+        @MemberId Long memberId,
         @RequestBody @Valid MemberBookCreateRequest request
     ) {
-        var memberId = 1L;
         var serviceRequest = request.toService();
         var response = memberBookService.createMemberBook(memberId, serviceRequest);
 
@@ -43,10 +44,10 @@ public class MemberBookController {
 
     @PatchMapping("/{memberBookId}")
     public ResponseEntity<ApiResponse<Void>> updateMemberBook(
+        @MemberId Long memberId,
         @PathVariable("memberBookId") Long memberBookId,
         @RequestBody @Valid MemberBookUpdateRequest request
     ) {
-        var memberId = 1L;
         var serviceRequest = request.toService(memberBookId);
         memberBookService.updateMemberBook(memberId, serviceRequest);
 
@@ -56,9 +57,9 @@ public class MemberBookController {
 
     @DeleteMapping("/{memberBookId}")
     public ResponseEntity<ApiResponse<Void>> deleteMemberBook(
+        @MemberId Long memberId,
         @PathVariable("memberBookId") Long memberBookId
     ) {
-        var memberId = 1L;
         memberBookService.deleteMemberBook(memberId, memberBookId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
@@ -67,10 +68,10 @@ public class MemberBookController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<Slice<MemberBookResponse>>> findAll(
+        @MemberId Long memberId,
         @RequestParam("status") String status,
         @PageableDefault Pageable pageable
     ) {
-        var memberId = 1L;
         var responses = memberBookService.findAll(memberId, status, pageable);
 
         return ResponseEntity.ok(ApiResponse.ok(responses));
