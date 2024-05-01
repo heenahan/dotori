@@ -9,7 +9,7 @@ import java.net.URI;
 @Getter
 @RequiredArgsConstructor
 @ConfigurationProperties(prefix = "aladin")
-public class AladinConfig {
+public class AladinProperties {
 
     private final String ttbkey;
     private final String url;

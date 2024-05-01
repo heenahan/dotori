@@ -12,7 +12,8 @@ public enum ErrorCode {
     INVALID_DATE("COMMON_003", "날짜가 범위를 넘어섰습니다."),
     NOT_FOUND("COMMON_004", "데이터를 찾을 수 없습니다."),
     DUPLICATED("COMMON_005", "데이터가 중복됩니다."),
-    NOT_OWNER("COMMON_006", "데이터의 소유자가 아닙니다.");
+    NOT_OWNER("COMMON_006", "데이터의 소유자가 아닙니다."),
+    INVALID_TOKEN("COMMON_007", "옳바르지 않은 토큰입니다.");
 
     private final String code;
     private final String description;

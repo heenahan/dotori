@@ -24,7 +24,7 @@ import java.util.Optional;
 public class AladinService implements BookApiService {
 
     private final AladinOpenFeign aladinOpenFeign;
-    private final AladinConfig aladinConfig;
+    private final AladinProperties aladinProperties;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -33,8 +33,8 @@ public class AladinService implements BookApiService {
         Pageable pageable
     ) {
         try {
-            var searchURI = aladinConfig.createSearchURI();
-            var ttbKey = aladinConfig.getTtbkey();
+            var searchURI = aladinProperties.createSearchURI();
+            var ttbKey = aladinProperties.getTtbkey();
             var request = AladinSearchRequest.of(ttbKey, query, pageable);
 
             var response = aladinOpenFeign.searchBooks(searchURI, request);
@@ -53,8 +53,8 @@ public class AladinService implements BookApiService {
         String isbn13
     ) {
         try {
-            var lookUpURI = aladinConfig.createLookUpURI();
-            var ttbKey = aladinConfig.getTtbkey();
+            var lookUpURI = aladinProperties.createLookUpURI();
+            var ttbKey = aladinProperties.getTtbkey();
             var request = AladinLookUpRequest.of(ttbKey, isbn13);
 
             var response = aladinOpenFeign.findBookDetail(lookUpURI, request);
