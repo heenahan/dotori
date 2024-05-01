@@ -7,16 +7,15 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Profile("!test")
 @RequiredArgsConstructor
-@Component
 public class JwtGenerator {
 
-    private static final String INVALID_TOKEN = "옳바르지 않은 토큰입니다. value = %s";
+    private static final String ROLE_KEY = "role";
+    private static final String INVALID_TOKEN = "유효하지 않거나 만료된 토큰입니다. value = %s";
     private static final String BLANK_TOKEN = "토큰이 비었습니다. value = %s";
 
     private final JwtProperties jwtProperties;
@@ -31,7 +30,7 @@ public class JwtGenerator {
         return Jwts.builder()
             .claims()
             .id(String.valueOf(memberId))
-            .add("role", role)
+            .add(ROLE_KEY, role)
             .and()
             .issuedAt(now)
             .expiration(accessTokenExpiresAt)

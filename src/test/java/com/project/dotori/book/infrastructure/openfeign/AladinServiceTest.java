@@ -1,10 +1,7 @@
 package com.project.dotori.book.infrastructure.openfeign;
 
-import com.project.dotori.global.config.CustomPropertiesConfig;
 import com.project.dotori.global.config.OpenFeignConfig;
-import com.project.dotori.global.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +12,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Disabled
+//@Disabled
 @Slf4j
 @SpringBootTest
 @Import({
     OpenFeignConfig.class,
-    CustomPropertiesConfig.class,
     FeignAutoConfiguration.class,
     HttpMessageConvertersAutoConfiguration.class
 })
@@ -58,14 +53,16 @@ class AladinServiceTest {
         assertThat(aladinLookUpResponse).isNotNull();
     }
 
-    @DisplayName("존재하지 않는 ISBN13을 이용하여 도서 상세 정보 조회시 예외가 발생한다.")
+    @DisplayName("존재하지 않는 ISBN13을 이용하여 도서 상세 정보 조회시 Optional.empty를 반환한다.")
     @Test
     void findBookDetailByInvalidIsbn() {
         // given
         var isbn13 = "WIRED_ISBN";
 
-        // when & then
-        assertThatThrownBy(() -> aladinService.findBookDetail(isbn13))
-            .isInstanceOf(BusinessException.class);
+        // when
+        var bookDetail = aladinService.findBookDetail(isbn13);
+
+        // then
+        assertThat(bookDetail).isEmpty();
     }
 }
