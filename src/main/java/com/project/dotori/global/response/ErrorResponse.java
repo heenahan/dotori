@@ -21,6 +21,14 @@ public class ErrorResponse {
         this.message = message;
     }
 
+    public static ErrorResponse unauthorization(
+        ErrorCode errorCode,
+        String message
+    ) {
+        final var status = HttpStatus.UNAUTHORIZED.value();
+        return new ErrorResponse(status, errorCode.getCode(), message);
+    }
+
     public static ErrorResponse badRequest(
         ErrorCode errorCode,
         String message
