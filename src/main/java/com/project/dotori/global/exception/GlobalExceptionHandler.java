@@ -30,6 +30,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(AuthorizationException.class)
+    protected ResponseEntity<ErrorResponse> handleAuthorizationException(
+        AuthorizationException e
+    ) {
+        final var errorResponse = ErrorResponse.unauthorization(e.getErrorCode(), e.getMessage());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
 //    @ExceptionHandler(Exception.class)
 //    protected ResponseEntity<ErrorResponse> handleException(
 //        Exception e
