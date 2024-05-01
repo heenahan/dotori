@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
@@ -26,8 +27,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -58,12 +58,16 @@ class MemberBookControllerTest extends RestDocsSupport {
 
         // when & then
         mockMvc.perform(post("/api/v1/member-books")
+                .header(HttpHeaders.AUTHORIZATION, getToken(1L))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
             ).andDo(print())
             .andExpect(status().isCreated())
             .andExpect(header().stringValues("Location", "/api/v1/member-books/" + memberBookId))
             .andDo(document("create-member-book",
+                requestHeaders(
+                    headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")
+                ),
                 requestFields(
                     fieldWithPath("isbn").type(JsonFieldType.STRING).description("책의 isbn"),
                     fieldWithPath("startDate").type(JsonFieldType.STRING).description("독서 시작 기간"),
@@ -95,11 +99,15 @@ class MemberBookControllerTest extends RestDocsSupport {
 
         // when & then
         mockMvc.perform(patch("/api/v1/member-books/{memberBookId}", memberBookId)
+                .header(HttpHeaders.AUTHORIZATION, getToken(1L))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
             ).andDo(print())
             .andExpect(status().isNoContent())
             .andDo(document("update-member-book",
+                requestHeaders(
+                    headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")
+                ),
                 pathParameters(
                     parameterWithName("memberBookId").description("독서 기록 아이디")
                 ),
@@ -131,11 +139,15 @@ class MemberBookControllerTest extends RestDocsSupport {
 
         // when & then
         mockMvc.perform(get("/api/v1/member-books")
+                .header(HttpHeaders.AUTHORIZATION, getToken(1L))
                 .param("status", memberBookStatus)
                 .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isOk())
             .andDo(document("find-member-books",
+                requestHeaders(
+                    headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")
+                ),
                 queryParameters(
                     parameterWithName("status").description("독서 기록 상태")
                 ),
@@ -208,10 +220,14 @@ class MemberBookControllerTest extends RestDocsSupport {
 
         // when & then
         mockMvc.perform(get("/api/v1/member-books/{memberBookId}", memberBookId)
+                .header(HttpHeaders.AUTHORIZATION, getToken(1L))
                 .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isOk())
             .andDo(document("find-member-book",
+                requestHeaders(
+                    headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")
+                ),
                 pathParameters(
                     parameterWithName("memberBookId").description("독서 기록 아이디")
                 ),
@@ -246,10 +262,14 @@ class MemberBookControllerTest extends RestDocsSupport {
 
         // when & then
         mockMvc.perform(delete("/api/v1/member-books/{memberBookId}", memberBookId)
+                .header(HttpHeaders.AUTHORIZATION, getToken(1L))
                 .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isNoContent())
             .andDo(document("delete-member-book",
+                requestHeaders(
+                    headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")
+                ),
                 pathParameters(
                     parameterWithName("memberBookId").description("독서 기록 아이디")
                 ),
