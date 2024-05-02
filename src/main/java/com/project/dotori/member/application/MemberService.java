@@ -17,9 +17,9 @@ public class MemberService {
         MemberCreateRequest request
     ) {
         var member = request.toEntity();
-        memberRepository.findBySocialIdAndRole(member.getSocialId(), member.getRole())
+        var savedMember = memberRepository.findBySocialIdAndRole(member.getSocialId(), member.getRole())
             .orElseGet(() -> memberRepository.save(member));
 
-        return member.getId();
+        return savedMember.getId();
     }
 }
