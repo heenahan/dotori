@@ -16,15 +16,33 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "social_id", length = 30, nullable = false)
+    private String socialId;
+
+    @Embedded
+    private Email email;
+
     @Embedded
     private Nickname nickname;
 
+    @Column(name = "roles", length = 30, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Builder
     private Member(
-        String nickname
+        String socialId,
+        String email,
+        String nickname,
+        Role role
     ) {
+        this.socialId = socialId;
+        this.email = Email.builder()
+            .email(email)
+            .build();
         this.nickname = Nickname.builder()
             .nickname(nickname)
             .build();
+        this.role = role;
     }
 }
