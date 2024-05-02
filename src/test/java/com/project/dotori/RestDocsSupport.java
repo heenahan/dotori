@@ -2,9 +2,9 @@ package com.project.dotori;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.project.dotori.auth.AuthorizationIntercepter;
-import com.project.dotori.auth.JwtGenerator;
-import com.project.dotori.auth.MemberIdArgumentResolver;
+import com.project.dotori.authorization.presentation.interceptor.AuthorizationInterceptor;
+import com.project.dotori.authorization.application.jwt.JwtGenerator;
+import com.project.dotori.authorization.presentation.handler.MemberIdArgumentResolver;
 import com.project.dotori.global.exception.GlobalExceptionHandler;
 import com.project.dotori.member.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +45,7 @@ public abstract class RestDocsSupport {
         this.mockMvc = MockMvcBuilders.standaloneSetup(setController())
             .addFilter(new CharacterEncodingFilter("UTF-8", true))
             .setControllerAdvice(GlobalExceptionHandler.class)
-            .addMappedInterceptors(new String[]{ "/api/v1/**" }, new AuthorizationIntercepter(jwtGenerator))
+            .addMappedInterceptors(new String[]{ "/api/v1/**" }, new AuthorizationInterceptor(jwtGenerator))
             .apply(MockMvcRestDocumentation.documentationConfiguration(provider)
                 .operationPreprocessors()
                 .withRequestDefaults(prettyPrint())
@@ -57,6 +57,6 @@ public abstract class RestDocsSupport {
     protected String getToken(
         Long memberId
     ) {
-        return TOKEN.formatted(jwtGenerator.generateAccessToken(memberId, Role.MEMBER));
+        return TOKEN.formatted(jwtGenerator.generateAccessToken(memberId, Role.GOOGLE));
     }
 }

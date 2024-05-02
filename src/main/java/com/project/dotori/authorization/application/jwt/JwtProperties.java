@@ -1,4 +1,4 @@
-package com.project.dotori.auth;
+package com.project.dotori.authorization.application.jwt;
 
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

@@ -1,4 +1,4 @@
-package com.project.dotori.auth;
+package com.project.dotori.authorization.presentation.handler;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

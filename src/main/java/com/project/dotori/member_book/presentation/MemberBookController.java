@@ -1,6 +1,6 @@
 package com.project.dotori.member_book.presentation;
 
-import com.project.dotori.auth.MemberId;
+import com.project.dotori.authorization.presentation.handler.MemberId;
 import com.project.dotori.global.response.ApiResponse;
 import com.project.dotori.member_book.application.MemberBookService;
 import com.project.dotori.member_book.application.response.MemberBookCreateResponse;

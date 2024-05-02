@@ -1,6 +1,6 @@
 package com.project.dotori.statistics.presentation;
 
-import com.project.dotori.auth.MemberId;
+import com.project.dotori.authorization.presentation.handler.MemberId;
 import com.project.dotori.global.response.ApiResponse;
 import com.project.dotori.statistics.application.StatisticsService;
 import com.project.dotori.statistics.application.response.StatisticsYearResponse;

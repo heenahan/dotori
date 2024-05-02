@@ -1,6 +1,7 @@
-package com.project.dotori.auth;
+package com.project.dotori.authorization;
 
 import com.project.dotori.JwtTestConfiguration;
+import com.project.dotori.authorization.application.jwt.JwtGenerator;
 import com.project.dotori.global.exception.AuthorizationException;
 import com.project.dotori.member.domain.Role;
 import org.junit.jupiter.api.DisplayName;
@@ -19,9 +20,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class JwtGeneratorTest {
 
     @Autowired
-    private JwtProperties jwtProperties;
-
-    @Autowired
     private JwtGenerator jwtGenerator;
 
     @DisplayName("에세스 토큰을 생성한 뒤 토큰으로 멤버의 아이디를 가져온다.")
@@ -29,7 +27,7 @@ class JwtGeneratorTest {
     void generateToken() {
         // given
         var memberId = 1L;
-        var role = Role.MEMBER;
+        var role = Role.GOOGLE;
 
         // when
         var accessToken = jwtGenerator.generateAccessToken(memberId, role);

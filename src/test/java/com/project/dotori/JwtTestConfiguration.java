@@ -1,7 +1,7 @@
 package com.project.dotori;
 
-import com.project.dotori.auth.JwtProperties;
-import com.project.dotori.auth.JwtGenerator;
+import com.project.dotori.authorization.application.jwt.JwtProperties;
+import com.project.dotori.authorization.application.jwt.JwtGenerator;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

@@ -1,5 +1,6 @@
-package com.project.dotori.auth;
+package com.project.dotori.authorization.presentation.handler;
 
+import com.project.dotori.authorization.application.jwt.Jwt;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
