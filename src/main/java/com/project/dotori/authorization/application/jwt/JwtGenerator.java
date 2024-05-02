@@ -1,4 +1,4 @@
-package com.project.dotori.auth;
+package com.project.dotori.authorization.application.jwt;
 
 import com.project.dotori.global.exception.AuthorizationException;
 import com.project.dotori.global.exception.ErrorCode;

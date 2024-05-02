@@ -1,5 +1,7 @@
-package com.project.dotori.auth;
+package com.project.dotori.authorization.presentation.interceptor;
 
+import com.project.dotori.authorization.application.jwt.Jwt;
+import com.project.dotori.authorization.application.jwt.JwtGenerator;
 import com.project.dotori.global.exception.AuthorizationException;
 import com.project.dotori.global.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +16,7 @@ import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
-public class AuthorizationIntercepter implements HandlerInterceptor {
+public class AuthorizationInterceptor implements HandlerInterceptor {
 
     private static final String NOT_HEADER = "Authorization 헤더가 없습니다.";
 
