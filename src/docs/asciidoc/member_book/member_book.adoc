@@ -4,6 +4,7 @@
 ==== HTTP Request
 
 include::{snippets}/create-member-book/http-request.adoc[]
+include::{snippets}/create-member-book/request-headers.adoc[]
 include::{snippets}/create-member-book/request-fields.adoc[]
 
 ==== HTTP Response
@@ -19,6 +20,7 @@ include::{snippets}/create-member-book/response-fields.adoc[]
 
 include::{snippets}/update-member-book/http-request.adoc[]
 include::{snippets}/update-member-book/path-parameters.adoc[]
+include::{snippets}/update-member-book/request-headers.adoc[]
 include::{snippets}/update-member-book/request-fields.adoc[]
 
 ==== HTTP Response
@@ -32,6 +34,7 @@ include::{snippets}/update-member-book/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/find-member-books/http-request.adoc[]
+include::{snippets}/find-member-books/request-headers.adoc[]
 include::{snippets}/find-member-books/query-parameters.adoc[]
 
 ==== HTTP Response
@@ -45,6 +48,7 @@ include::{snippets}/find-member-books/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/find-member-book/http-request.adoc[]
+include::{snippets}/find-member-book/request-headers.adoc[]
 include::{snippets}/find-member-book/path-parameters.adoc[]
 
 ==== HTTP Response
@@ -57,10 +61,11 @@ include::{snippets}/find-member-book/response-fields.adoc[]
 
 ==== HTTP Request
 
-include::{snippets}/find-member-book/http-request.adoc[]
-include::{snippets}/find-member-book/path-parameters.adoc[]
+include::{snippets}/delete-member-book/http-request.adoc[]
+include::{snippets}/delete-member-book/request-headers.adoc[]
+include::{snippets}/delete-member-book/path-parameters.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/find-member-book/http-response.adoc[]
-include::{snippets}/find-member-book/response-fields.adoc[]
+include::{snippets}/delete-member-book/http-response.adoc[]
+include::{snippets}/delete-member-book/response-fields.adoc[]

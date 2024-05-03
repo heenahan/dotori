@@ -45,7 +45,11 @@ public abstract class RestDocsSupport {
         this.mockMvc = MockMvcBuilders.standaloneSetup(setController())
             .addFilter(new CharacterEncodingFilter("UTF-8", true))
             .setControllerAdvice(GlobalExceptionHandler.class)
-            .addMappedInterceptors(new String[]{ "/api/v1/**" }, new AuthorizationInterceptor(jwtGenerator))
+            .addMappedInterceptors(new String[]{
+                "/api/v1/books/**",
+                "/api/v1/member-books/**",
+                "/api/v1/statistics/**"
+            }, new AuthorizationInterceptor(jwtGenerator))
             .apply(MockMvcRestDocumentation.documentationConfiguration(provider)
                 .operationPreprocessors()
                 .withRequestDefaults(prettyPrint())

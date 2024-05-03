@@ -9,10 +9,10 @@ endif::[]
 :toclevels: 2
 :sectlinks:
 
-[[Member-API]]
-== 멤버 도메인 API
+[[Authorization-API]]
+== 인증 도메인 API
 
-include::member/member.adoc[]
+include::authorization/authorization.adoc[]
 
 [[Book-API]]
 == 책 도메인 API
@@ -23,3 +23,8 @@ include::book/book.adoc[]
 == 독서 기록 도메인 API
 
 include::member_book/member_book.adoc[]
+
+[[Statistics-API]]
+== 통계 도메인 API
+
+include::statistics/statistics.adoc[]
