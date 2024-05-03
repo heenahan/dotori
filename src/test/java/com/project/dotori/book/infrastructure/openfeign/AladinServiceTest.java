@@ -2,6 +2,7 @@ package com.project.dotori.book.infrastructure.openfeign;
 
 import com.project.dotori.global.config.OpenFeignConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.data.domain.PageRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@Disabled
+@Disabled
 @Slf4j
 @SpringBootTest
 @Import({
