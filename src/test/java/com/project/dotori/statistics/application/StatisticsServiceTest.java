@@ -5,6 +5,7 @@ import com.project.dotori.book.domain.BookCategory;
 import com.project.dotori.book.domain.repository.BookCategoryRepository;
 import com.project.dotori.book.domain.repository.BookRepository;
 import com.project.dotori.member.domain.Member;
+import com.project.dotori.member.domain.Role;
 import com.project.dotori.member.domain.repository.MemberRepository;
 import com.project.dotori.member_book.domain.BookLevel;
 import com.project.dotori.member_book.domain.MemberBook;
@@ -81,7 +82,10 @@ class StatisticsServiceTest {
 
     private Member createMember() {
         return Member.builder()
+            .socialId("1234")
+            .email("abc@abc.com")
             .nickname("nickname")
+            .role(Role.GOOGLE)
             .build();
     }
 

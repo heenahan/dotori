@@ -1,4 +1,4 @@
-package com.project.dotori.authorization;
+package com.project.dotori.authorization.application.jwt;
 
 import com.project.dotori.JwtTestConfiguration;
 import com.project.dotori.authorization.application.jwt.JwtGenerator;
