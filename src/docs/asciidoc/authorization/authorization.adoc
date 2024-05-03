@@ -1,0 +1,12 @@
+[[login-google]]
+=== 구글 소셜 로그인한다.
+
+==== HTTP Request
+
+include::{snippets}/login-google/http-request.adoc[]
+include::{snippets}/login-google/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/login-google/http-response.adoc[]
+include::{snippets}/login-google/response-fields.adoc[]

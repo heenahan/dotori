@@ -1,9 +1,10 @@
 [[find-statistics-year]]
-=== 연도별 독서 기록 통계를 조회한다..
+=== 연간 독서 기록 통계를 조회한다.
 
 ==== HTTP Request
 
 include::{snippets}/find-statistics-year/http-request.adoc[]
+include::{snippets}/find-statistics-year/request-headers.adoc[]
 include::{snippets}/find-statistics-year/query-parameters.adoc[]
 
 ==== HTTP Response
