@@ -27,4 +27,4 @@ COPY --from=build /app/build/libs/dotori-0.0.1-SNAPSHOT.jar /app/dotori.jar
 EXPOSE 8080
 
 ENTRYPOINT ["java"]
-CMD ["-jar", "dotori.jar"]
+CMD ["-jar", "-Duser.timezone=Asia/Seoul", "-Dspring.profiles.active=dev", "-Dspring.config.location=${location}", "dotori.jar"]
