@@ -11,7 +11,7 @@ public class JwtTestConfiguration {
     @Bean
     public JwtProperties jwtProperties() {
         var randomKey = StringRandomGenerator.generate(56);
-        return new JwtProperties(1000L, randomKey);
+        return new JwtProperties(10000L, randomKey);
     }
 
     @Bean
