@@ -32,9 +32,6 @@ public abstract class RestDocsSupport {
     @Autowired
     private JwtGenerator jwtGenerator;
 
-    @Autowired
-    private MemberIdArgumentResolver memberIdArgumentResolver;
-
     protected MockMvc mockMvc;
     protected ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
