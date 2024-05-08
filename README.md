@@ -6,7 +6,8 @@
 [📜API 문서](https://dotori-book.site/docs)
 
 ## Infra
-![cicd](https://github.com/heenahan/dotori/assets/83766322/6909769f-a256-44b6-a411-f3fabf3b115f)
+![cicd](https://github.com/heenahan/dotori/assets/83766322/5c4665dd-fd6f-4866-8052-44f43d829d7f)
+
 
 ## ERD
 ![dotori-erd](https://github.com/heenahan/dotori/assets/83766322/c3b96dd7-34fd-44ee-b438-9a7cb9f4f380)
