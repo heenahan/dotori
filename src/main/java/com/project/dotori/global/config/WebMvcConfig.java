@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,13 +21,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final MemberIdArgumentResolver memberIdArgumentResolver;
 
     @Bean
-    public AuthorizationInterceptor authorizationIntercepter() {
+    public AuthorizationInterceptor authorizationInterceptor() {
         return new AuthorizationInterceptor(jwtGenerator);
     }
 
     @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/v1/**")
+            .allowedOrigins("http://localhost:8080");
+    }
+
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authorizationIntercepter())
+        registry.addInterceptor(authorizationInterceptor())
             .addPathPatterns("/api/v1/**")
             .excludePathPatterns("/api/v1/auth/**");
     }
