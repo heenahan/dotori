@@ -104,12 +104,14 @@ class BookControllerTest extends RestDocsSupport {
         var bookSearchResponse1 = BookSearchResponse.builder()
             .title("영어가 쉽다!")
             .author("김작가")
+            .isbn13("4567")
             .coverPath("https://")
             .publisher("조은교육")
             .build();
         var bookSearchResponse2 = BookSearchResponse.builder()
             .title("영어랑 놀자")
             .author("박작가")
+            .isbn13("1234")
             .coverPath("https://")
             .publisher("행복도서")
             .build();
@@ -135,6 +137,7 @@ class BookControllerTest extends RestDocsSupport {
                 fieldWithPath("serverTime").type(JsonFieldType.STRING).description("현재 서버 시간"),
                 fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
                 fieldWithPath("data.content[]").type(JsonFieldType.ARRAY).description("검색된 책 목록"),
+                fieldWithPath("data.content[].isbn13").type(JsonFieldType.STRING).description("책의 isbn13"),
                 fieldWithPath("data.content[].title").type(JsonFieldType.STRING).description("책의 제목"),
                 fieldWithPath("data.content[].author").type(JsonFieldType.STRING).description("책의 저자"),
                 fieldWithPath("data.content[].coverPath").type(JsonFieldType.STRING).description("책의 이미지 경로"),
