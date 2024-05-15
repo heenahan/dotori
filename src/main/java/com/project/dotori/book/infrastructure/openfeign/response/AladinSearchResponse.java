@@ -25,6 +25,7 @@ public record AladinSearchResponse(
             .author(author)
             .title(title)
             .publisher(publisher)
+            .isbn13(isbn13)
             .build();
     }
 }

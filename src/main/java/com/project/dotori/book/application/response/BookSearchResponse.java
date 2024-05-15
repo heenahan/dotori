@@ -7,6 +7,7 @@ public record BookSearchResponse(
     String coverPath,
     String title,
     String author,
-    String publisher
+    String publisher,
+    String isbn13
 ) {
 }
