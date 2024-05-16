@@ -14,7 +14,8 @@ public enum ErrorCode {
     NOT_FOUND("COMMON_005", "데이터를 찾을 수 없습니다."),
     DUPLICATED("COMMON_006", "데이터가 중복됩니다."),
     NOT_OWNER("COMMON_007", "데이터의 소유자가 아닙니다."),
-    INVALID_TOKEN("COMMON_008", "옳바르지 않은 토큰입니다.");
+    INVALID_TOKEN("COMMON_008", "옳바르지 않은 토큰입니다."),
+    INTERNAL_SERVER_ERROR("COMMON_009", "서버에서 알 수 없는 에러가 발생했습니다.");
 
     private final String code;
     private final String description;

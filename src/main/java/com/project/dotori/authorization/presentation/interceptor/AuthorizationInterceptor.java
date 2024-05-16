@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -24,6 +25,12 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        // preflight 요청 처리
+        if (Objects.equals(request.getMethod(), HttpMethod.OPTIONS.name())) {
+            return true;
+        }
+
+        // handler가 HandlerMethod가 아닌 경우
         if (!(handler instanceof HandlerMethod)) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 
