@@ -14,6 +14,7 @@ public record AladinLookUpResponse(
     LocalDate pubDate,
     String isbn13,
     String cover,
+    Long categoryId,
     String categoryName,
     String publisher,
     AladinSubInfo subInfo
@@ -27,6 +28,7 @@ public record AladinLookUpResponse(
             .author(author)
             .publisher(publisher)
             .isbn13(isbn13)
+            .categoryId(categoryId)
             .categoryName(categoryName)
             .publishDate(pubDate)
             .description(description)

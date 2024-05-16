@@ -6,6 +6,7 @@ import com.project.dotori.member_book.domain.MemberBookStatus;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Builder
 public record MemberBookCreateServiceRequest(
@@ -27,13 +28,17 @@ public record MemberBookCreateServiceRequest(
         String bookLevel,
         String memberBookStatus
     ) {
+        var convertedBookLevel = Optional.ofNullable(bookLevel)
+            .map(BookLevel::from)
+            .orElseGet(() -> null);
+
         return MemberBookCreateServiceRequest.builder()
             .isbn(isbn)
             .startDate(startDate)
             .endDate(endDate)
             .page(page)
             .star(star)
-            .bookLevel(BookLevel.from(bookLevel))
+            .bookLevel(convertedBookLevel)
             .memberBookStatus(MemberBookStatus.from(memberBookStatus))
             .build();
     }
