@@ -14,9 +14,9 @@ public enum BookLevel {
 
     EASY("쉬움"),
     A_LITTLE_EASY("조금 쉬움"),
-    MEDIUM("보통"),
-    A_LITTLE_DIFFICULT("조금 어려움"),
-    DIFFICULT("어려움");
+    NORMAL("보통"),
+    A_LITTLE_HARD("조금 어려움"),
+    HARD("어려움");
 
     private static final String NOT_FOUND = "BookLevel에서 적절한 값을 찾을 수 없습니다. value = %s";
     private final String description;

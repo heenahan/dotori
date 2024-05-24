@@ -20,7 +20,7 @@ class BookBasicInfoTest {
     @Nested
     class LengthTest {
 
-        @DisplayName("title이 빈칸이거나 50자를 초과하면 예외가 발생한다.")
+        @DisplayName("title이 빈칸이거나 100자를 초과하면 예외가 발생한다.")
         @MethodSource("invalidTitle")
         @ParameterizedTest
         void validTitle(String title) {
@@ -34,7 +34,7 @@ class BookBasicInfoTest {
                 .isInstanceOf(BusinessException.class);
         }
 
-        @DisplayName("author이 빈칸이거나 50자를 초과하면 예외가 발생한다.")
+        @DisplayName("author이 빈칸이거나 100자를 초과하면 예외가 발생한다.")
         @MethodSource("invalidAuthor")
         @ParameterizedTest
         void validAuthor(String author) {
@@ -52,7 +52,7 @@ class BookBasicInfoTest {
             return Stream.of(
                 null,
                 Arguments.arguments(""),
-                Arguments.arguments(StringRandomGenerator.generate(51))
+                Arguments.arguments(StringRandomGenerator.generate(101))
             );
         }
 
@@ -60,7 +60,7 @@ class BookBasicInfoTest {
             return Stream.of(
                 null,
                 Arguments.arguments(""),
-                Arguments.arguments(StringRandomGenerator.generate(51))
+                Arguments.arguments(StringRandomGenerator.generate(101))
             );
         }
     }

@@ -22,9 +22,8 @@ public interface MemberBookRepository extends JpaRepository<MemberBook, Long> {
                 mb.bookReview.star, mb.bookReview.page, mb.bookReview.percentage, mb.bookReview.bookLevel
             )
         from Book b
-        join MemberBook mb on b.isbn = mb.bookId
+        join MemberBook mb on b.isbn = mb.bookId and mb.id = :memberBookId
         join BookCategory bc on b.categoryId = bc.id
-        where mb.id = :memberBookId
     """)
     Optional<MemberBookDetailQueryResponse> findMemberBookDetailById(
         @Param("memberBookId") Long memberBookId

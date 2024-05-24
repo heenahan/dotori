@@ -22,7 +22,7 @@ class BookReviewTest {
             .page(100)
             .star(star)
             .totalPage(300)
-            .bookLevel(BookLevel.MEDIUM)
+            .bookLevel(BookLevel.NORMAL)
             .build();
 
         // then
@@ -39,7 +39,7 @@ class BookReviewTest {
                 .page(100)
                 .star(star)
                 .totalPage(300)
-                .bookLevel(BookLevel.MEDIUM)
+                .bookLevel(BookLevel.NORMAL)
                 .build(); })
             .isInstanceOf(BusinessException.class)
             .hasMessage("star는 0.0이상 5.0이하의 유리수여야 합니다. value = %f".formatted(star));
@@ -55,7 +55,7 @@ class BookReviewTest {
                 .page(100)
                 .star(star)
                 .totalPage(300)
-                .bookLevel(BookLevel.MEDIUM)
+                .bookLevel(BookLevel.NORMAL)
                 .build(); })
             .isInstanceOf(BusinessException.class)
             .hasMessage("star의 소수점은 0이거나 5이어야 합니다. value = %f".formatted(star));

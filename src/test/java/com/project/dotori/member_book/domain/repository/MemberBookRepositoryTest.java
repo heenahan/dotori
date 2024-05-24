@@ -319,7 +319,7 @@ class MemberBookRepositoryTest {
             .page(500)
             .totalPage(500)
             .star(4.0f)
-            .bookLevel(BookLevel.DIFFICULT)
+            .bookLevel(BookLevel.HARD)
             .build();
 
         var memberBook4 = MemberBook.builder()
@@ -371,7 +371,7 @@ class MemberBookRepositoryTest {
             .page(500)
             .totalPage(500)
             .star(4.0f)
-            .bookLevel(BookLevel.DIFFICULT)
+            .bookLevel(BookLevel.HARD)
             .build();
 
         return List.of(memberBook1, memberBook2, memberBook3);
