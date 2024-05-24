@@ -210,7 +210,7 @@ class MemberBookServiceTest {
             memberBook.getBookReview().getStar(),
             memberBook.getBookReview().getPage(),
             memberBook.getBookReview().getPercentage(),
-            memberBook.getBookReview().getBookLevel().getDescription()
+            memberBook.getBookReview().getBookLevel().name()
         );
     }
 
