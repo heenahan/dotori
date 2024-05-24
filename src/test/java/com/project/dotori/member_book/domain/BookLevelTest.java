@@ -43,9 +43,9 @@ class BookLevelTest {
         return Stream.of(
             Arguments.arguments("EASY", BookLevel.EASY),
             Arguments.arguments("A_LITTLE_EASY", BookLevel.A_LITTLE_EASY),
-            Arguments.arguments("MEDIUM", BookLevel.MEDIUM),
-            Arguments.arguments("A_LITTLE_DIFFICULT", BookLevel.A_LITTLE_DIFFICULT),
-            Arguments.arguments("DIFFICULT", BookLevel.DIFFICULT)
+            Arguments.arguments("MEDIUM", BookLevel.NORMAL),
+            Arguments.arguments("A_LITTLE_DIFFICULT", BookLevel.A_LITTLE_HARD),
+            Arguments.arguments("DIFFICULT", BookLevel.HARD)
         );
     }
 }

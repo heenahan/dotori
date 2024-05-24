@@ -194,7 +194,7 @@ class StatisticsServiceTest {
             .page(500)
             .totalPage(books.get(2).getBookBasicInfo().getPage())
             .star(4.0f)
-            .bookLevel(BookLevel.DIFFICULT)
+            .bookLevel(BookLevel.HARD)
             .build();
 
         var memberBook4 = MemberBook.builder()

@@ -346,7 +346,7 @@ class MemberBookServiceTest {
             .startDate(LocalDate.of(2024, 4, 1))
             .endDate(LocalDate.of(2024, 4, 20))
             .totalPage(book.getBookBasicInfo().getPage())
-            .bookLevel(BookLevel.MEDIUM)
+            .bookLevel(BookLevel.NORMAL)
             .build();
     }
 
@@ -381,7 +381,7 @@ class MemberBookServiceTest {
             .page(300)
             .totalPage(300)
             .star(4.0f)
-            .bookLevel(BookLevel.DIFFICULT)
+            .bookLevel(BookLevel.HARD)
             .build();
 
         return List.of(memberBook1, memberBook2, memberBook3);

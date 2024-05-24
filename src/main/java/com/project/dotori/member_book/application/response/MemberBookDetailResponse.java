@@ -45,7 +45,7 @@ public record MemberBookDetailResponse(
         MemberBookDetailQueryResponse response
     ) {
         var bookLevel = Optional.ofNullable(response.bookLevel())
-            .map(BookLevel::getDescription)
+            .map(BookLevel::name)
             .orElseGet(() -> null);
 
         return MemberBookDetailResponse.builder()
