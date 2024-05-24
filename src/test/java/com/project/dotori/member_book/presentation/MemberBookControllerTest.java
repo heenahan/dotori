@@ -289,7 +289,7 @@ class MemberBookControllerTest extends RestDocsSupport {
             .page(200)
             .star(4.0f)
             .memberBookStatus("READ")
-            .bookLevel("MEDIUM")
+            .bookLevel("NORMAL")
             .build();
     }
 
