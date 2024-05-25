@@ -69,7 +69,7 @@ public class MemberBookController {
     @GetMapping
     public ResponseEntity<ApiResponse<Slice<MemberBookResponse>>> findAll(
         @MemberId Long memberId,
-        @RequestParam("status") String status,
+        @RequestParam(name = "status", required = false, defaultValue = "null") String status,
         @PageableDefault Pageable pageable
     ) {
         var responses = memberBookService.findAll(memberId, status, pageable);
