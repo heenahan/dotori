@@ -41,6 +41,7 @@ public record MemberBookResponse(
         MemberBookQueryResponse response
     ) {
         return MemberBookResponse.builder()
+            .memberBookId(response.memberBookId())
             .coverPath(response.coverPath())
             .title(response.title())
             .author(response.author())
