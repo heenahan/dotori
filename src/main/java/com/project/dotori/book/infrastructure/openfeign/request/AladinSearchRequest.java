@@ -26,7 +26,7 @@ public class AladinSearchRequest {
             .ttbkey(ttbkey)
             .query(query)
             .queryType("Title")
-            .start((pageable.getPageNumber() - 1) * pageable.getPageSize() + 1)
+            .start(pageable.getPageNumber() * pageable.getPageSize() + 1)
             .maxResults(pageable.getPageSize() + 1)
             .cover("Big")
             .output("JS")

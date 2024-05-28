@@ -13,6 +13,10 @@ public final class SliceConverter<T> {
         Pageable pageable
     ) {
         var hasNext = content.size() > pageable.getPageSize();
+        // 마지막 원소 삭제
+        if (hasNext) {
+            content = content.subList(0, pageable.getPageSize() - 1);
+        }
 
         return new SliceImpl<>(content, pageable, hasNext);
     }
