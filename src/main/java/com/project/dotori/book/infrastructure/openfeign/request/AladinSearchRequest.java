@@ -1,6 +1,9 @@
 package com.project.dotori.book.infrastructure.openfeign.request;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Pageable;
 
 @Getter
@@ -11,7 +14,7 @@ public class AladinSearchRequest {
     private String ttbkey;
     private String query; // 검색어
     private String queryType;
-    private Integer start;
+    private Integer Start;
     private Integer maxResults;
     private String cover;
     private String output;
@@ -26,7 +29,7 @@ public class AladinSearchRequest {
             .ttbkey(ttbkey)
             .query(query)
             .queryType("Title")
-            .start(pageable.getPageNumber() * pageable.getPageSize() + 1)
+            .Start(pageable.getPageNumber() + 1)
             .maxResults(pageable.getPageSize() + 1)
             .cover("Big")
             .output("JS")
